@@ -18,7 +18,14 @@ from src.gee.aoi import get_aoi
 from src.gee.preprocess import prepare_composite
 from src.gee.indices import with_indices
 from src.gee.change import compute_diffs, classify_dnbr
-from src.visualize import vis_params, save_folium, reduce_mean, write_summary_csv
+from src.visualize import (
+    vis_params,
+    save_folium,
+    reduce_mean,
+    write_summary_csv,
+    compute_severity_areas,
+    write_kv_csv,
+)
 
 
 def run_pipeline(
@@ -29,6 +36,7 @@ def run_pipeline(
     aoi_geojson: str = "data/aoi.geojson",
     out_dir: str = "results",
     project: Optional[str] = None,
+    area_scale: int = 10,
 ) -> Dict[str, str]:
     """Analizi çalıştırır ve çıktı dosya yollarını döndürür.
 
@@ -97,5 +105,10 @@ def run_pipeline(
     }
     outputs["summary_csv"] = os.path.join(out_dir, "summary_stats.csv")
     write_summary_csv(outputs["summary_csv"], summary)
+
+    # Severity alan istatistikleri (EE pixelArea) ve toplam yanmış alan
+    areas = compute_severity_areas(severity, aoi, scale=area_scale)
+    outputs["severity_areas_csv"] = os.path.join(out_dir, "severity_areas.csv")
+    write_kv_csv(outputs["severity_areas_csv"], areas)
 
     return outputs

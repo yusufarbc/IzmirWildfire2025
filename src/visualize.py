@@ -276,3 +276,44 @@ def export_truecolor_pngs(
     outs["post_rgb_png"] = os.path.join(out_dir, "post_RGB.png")
     download_png(post, aoi, vis_rgb, outs["post_rgb_png"], dimensions=1600)
     return outs
+
+
+def compute_severity_areas(severity: ee.Image, aoi: ee.Geometry, *, scale: int = 10) -> Dict[str, float]:
+    """dNBR şiddet sınıfları için alan (m^2 ve ha) ve toplam yanmış alanı hesaplar.
+
+    Sınıf kodları 0..4; yanmış alan = kod >= 1 sınıfların toplamı.
+    """
+    # AOI alanı (m^2)
+    aoi_area_stats = ee.Image.pixelArea().reduceRegion(
+        reducer=ee.Reducer.sum(), geometry=aoi, scale=scale, maxPixels=1e13
+    )
+    aoi_area_m2_val = aoi_area_stats.get('area').getInfo()
+    aoi_area_m2 = float(aoi_area_m2_val) if aoi_area_m2_val is not None else 0.0
+    results: Dict[str, float] = {
+        'aoi_area_m2': aoi_area_m2,
+        'aoi_area_ha': aoi_area_m2 / 1e4,
+    }
+    burned_m2 = 0.0
+    for code in range(5):
+        stats = ee.Image.pixelArea().updateMask(severity.eq(code)).reduceRegion(
+            reducer=ee.Reducer.sum(), geometry=aoi, scale=scale, maxPixels=1e13
+        )
+        area_val = stats.get('area').getInfo()
+        m2 = float(area_val) if area_val is not None else 0.0
+        results[f'class_{code}_m2'] = m2
+        results[f'class_{code}_ha'] = m2 / 1e4
+        if code >= 1:
+            burned_m2 += m2
+    results['burned_area_m2'] = burned_m2
+    results['burned_area_ha'] = burned_m2 / 1e4
+    return results
+
+
+def write_kv_csv(path: str, rows: Dict[str, float]) -> None:
+    """metric,value biçiminde CSV yazar."""
+    ensure_dir(os.path.dirname(path))
+    with open(path, 'w', newline='', encoding='utf-8') as f:
+        w = csv.writer(f)
+        w.writerow(['metric', 'value'])
+        for k, v in rows.items():
+            w.writerow([k, v])

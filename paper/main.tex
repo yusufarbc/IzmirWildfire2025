@@ -558,8 +558,10 @@ Bu çalışmada hesaplanan ortalamalar: öncesi NDVI yaklaşık 0.54, sonrası N
   Orta--Yüksek & 3 & -- & -- \\
   Yüksek & 4 & -- & -- \\\bottomrule
   \end{tabular}
-  \caption{dNBR şiddet sınıfları için alan ve piksel sayıları (yer tutucu). Gerçek değerler sınıf piksel sayılarının piksel alanı ile çarpılmasıyla elde edilir.}
+  \caption{dNBR şiddet sınıfları için alan ve piksel sayıları. Değerler \texttt{../results/severity\_areas.csv} dosyasındaki \texttt{class\_k\_ha} ve piksel sayıları üzerinden doldurulacaktır. Toplam yanmış alan \texttt{burned\_area\_ha} olarak raporlanır.}
 \end{table}
+
+\paragraph{Yanmış Alan (EE ile kesin)} Bu çalışmada toplam yanmış alan, \emph{Google Earth Engine} üzerinde \(\mathrm{dNBR}\) sınıf rasterında piksel alanı indirgemesi (\texttt{pixelArea}) ile AOI üzerinde hesaplanmakta ve \texttt{../results/severity\_areas.csv} dosyasında \texttt{burned\_area\_ha} olarak raporlanmaktadır. Görsel histogramına dayalı yaklaşık yöntem kullanılmamıştır.
 
 Etkilenen alan büyüklükleri, sınıf piksel sayıları ve/veya eşiklerin literatürle
 karşılaştırılması ek bir tablo olarak verilebilir. RGB karşılaştırmaları (\ref{fig:rgb})
