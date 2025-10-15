@@ -165,3 +165,113 @@ def write_summary_csv(path: str, rows: Dict[str, float]):
         w.writerow(["metric", "value"])
         for k, v in rows.items():
             w.writerow([k, v])
+
+
+# --- Report-friendly PNG exports ---
+
+import requests
+
+
+def _region_geojson(aoi: ee.Geometry) -> dict:
+    """AOI'yi getThumbURL/getDownloadURL için GeoJSON'a dönüştürür."""
+    return aoi.getInfo()
+
+
+def download_png(image: ee.Image, aoi: ee.Geometry, vis: dict, out_path: str, *, scale: Optional[int] = 20, dimensions: Optional[int] = None) -> str:
+    """GEE `ee.Image` için rapor dostu PNG indirir.
+
+    image.visualize(**vis) ile 8‑bit görsel üretilir ve `getThumbURL` ile alınır.
+
+    Args:
+        image: Görselleştirilecek ee.Image
+        aoi: Bölge (region)
+        vis: Görselleştirme parametreleri (min/max/palette)
+        out_path: Kaydedilecek PNG yolu
+        scale: Piksel çözünürlüğü (metre). `dimensions` verilirse isteğe bağlıdır.
+        dimensions: Uzun kenar piksel sayısı (örn. 1280). Verilirse scale yerine kullanılır.
+    Returns:
+        out_path
+    """
+    ensure_dir(os.path.dirname(out_path))
+    vis_img = image.visualize(**vis)
+    params: Dict[str, object] = {
+        "region": _region_geojson(aoi),
+        "format": "png",
+    }
+    if dimensions is not None:
+        params["dimensions"] = dimensions
+    elif scale is not None:
+        params["scale"] = scale
+    url = vis_img.getThumbURL(params)
+    with requests.get(url, stream=True) as r:
+        r.raise_for_status()
+        with open(out_path, "wb") as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                if chunk:
+                    f.write(chunk)
+    return out_path
+
+
+def export_report_pngs(*, pre: ee.Image, post: ee.Image, diffs: Dict[str, ee.Image], severity: ee.Image, aoi: ee.Geometry, out_dir: str = "results") -> Dict[str, str]:
+    """Pre/Post ve fark katmanlarını PNG olarak dışa aktarır.
+
+    Üretilen dosyalar: pre_NDVI.png, post_NDVI.png, pre_NBR.png, post_NBR.png,
+    dNDVI.png, dNBR.png, severity.png
+    """
+    ensure_dir(out_dir)
+    vp = vis_params()
+    outs: Dict[str, str] = {}
+    outs["pre_ndvi_png"] = os.path.join(out_dir, "pre_NDVI.png")
+    download_png(pre.select("NDVI"), aoi, vp["NDVI"], outs["pre_ndvi_png"], dimensions=1280)
+
+    outs["post_ndvi_png"] = os.path.join(out_dir, "post_NDVI.png")
+    download_png(post.select("NDVI"), aoi, vp["NDVI"], outs["post_ndvi_png"], dimensions=1280)
+
+    outs["pre_nbr_png"] = os.path.join(out_dir, "pre_NBR.png")
+    download_png(pre.select("NBR"), aoi, vp["NBR"], outs["pre_nbr_png"], dimensions=1280)
+
+    outs["post_nbr_png"] = os.path.join(out_dir, "post_NBR.png")
+    download_png(post.select("NBR"), aoi, vp["NBR"], outs["post_nbr_png"], dimensions=1280)
+
+    outs["dndvi_png"] = os.path.join(out_dir, "dNDVI.png")
+    download_png(diffs["dNDVI"], aoi, vp["dNDVI"], outs["dndvi_png"], dimensions=1280)
+
+    outs["dnbr_png"] = os.path.join(out_dir, "dNBR.png")
+    download_png(diffs["dNBR"], aoi, vp["dNBR"], outs["dnbr_png"], dimensions=1280)
+
+    # Severity görseli (ayrık palet) için de visualize kullanılabilir
+    outs["severity_png"] = os.path.join(out_dir, "severity.png")
+    download_png(severity, aoi, vp["severity"], outs["severity_png"], dimensions=1280)
+    return outs
+
+
+def export_truecolor_pngs(
+    *,
+    pre: ee.Image,
+    post: ee.Image,
+    aoi: ee.Geometry,
+    out_dir: str = "results",
+    min_val: int = 0,
+    max_val: int = 3000,
+    gamma: float = 1.2,
+) -> Dict[str, str]:
+    """Sentinel‑2 doğal renk (B4,B3,B2) PNG çıktıları üretir (rapor dostu).
+
+    Args:
+        pre: Ön dönem kompozit görüntü (orijinal bantları içermeli)
+        post: Sonraki dönem kompozit görüntü
+        aoi: Bölge
+        out_dir: Çıktı klasörü
+        min_val, max_val: Görselleştirme aralığı (S2 SR için genelde 0–3000 iyi başlangaç)
+        gamma: Gamma düzeltmesi (RGB için 1.1–1.4 arası önerilir)
+    Returns:
+        {anahtar: yol} sözlüğü (pre_rgb_png, post_rgb_png)
+    """
+    ensure_dir(out_dir)
+    vis_rgb = {"bands": ["B4", "B3", "B2"], "min": min_val, "max": max_val, "gamma": [gamma, gamma, gamma]}
+    outs: Dict[str, str] = {}
+    outs["pre_rgb_png"] = os.path.join(out_dir, "pre_RGB.png")
+    download_png(pre, aoi, vis_rgb, outs["pre_rgb_png"], dimensions=1600)
+    outs["post_rgb_png"] = os.path.join(out_dir, "post_RGB.png")
+    download_png(post, aoi, vis_rgb, outs["post_rgb_png"], dimensions=1600)
+    return outs
