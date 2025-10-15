@@ -21,22 +21,27 @@ Karabük 2025 orman yangını etkisinin Sentinel-2 verileri ile NDVI ve NBR inde
 ```
 KarabukWildfire2025/
 ├── data/                  # AOI/yardımcı veriler (örn. aoi.geojson)
-├── notebooks/             # Jupyter analiz rehberi/defterleri
 ├── src/                   # Python kodları (GEE pipeline)
 ├── results/               # Haritalar ve çıktı dosyaları
 ├── docs/                  # Raporlar ve ek doküman
+├── analysis.ipynb         # Tek Jupyter defteri (kök dizinde)
 ├── README.md              # Proje tanıtımı ve kullanım
 ├── requirements.txt       # Kütüphaneler
-└── LICENSE                # Lisans (MIT varsayılan)
+├── LICENSE                # Lisans (MIT varsayılan)
 ```
 
 **Kurulum**
-- Python 3.10+ önerilir.
-- Sanal ortam:
-  - venv: `python -m venv .venv && . .venv/Scripts/activate` (Windows) veya `. .venv/bin/activate`
-  - kurulum: `pip install -r requirements.txt`
+- Python 3.10+ önerilir (3.11 uyumlu).
+- Sanal ortam (Windows):
+  - `python -m venv .venv311 && . .venv311/Scripts/activate`
+  - `pip install -r requirements.txt`
 - GEE yetkilendirme:
   - `earthengine authenticate` komutu ile oturum açın (tarayıcı ile). Alternatif olarak servis hesabı kullanabilirsiniz (bkz. `src/utils.py`).
+
+**Kullanım (Notebook)**
+- `analysis.ipynb` defterini açın.
+- Gerekirse tarih aralıklarını ve `data/aoi.geojson` yolunu güncelleyin.
+- Hücreleri sırayla çalıştırın; çıktılar `results/` klasörüne yazılır ve defter içinde gömülü önizleme bulunur.
 
 **Kullanım (CLI)**
 ```
