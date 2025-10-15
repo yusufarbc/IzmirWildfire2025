@@ -57,27 +57,36 @@ def run_pipeline(
     ensure_dir(out_dir)
 
     outputs = {}
+    # Date range labels
+    pre_label = f"{pre_start}–{pre_end}"
+    post_label = f"{post_start}–{post_end}"
     # Maps
+    # True color (RGB)
+    outputs["pre_rgb_map"] = os.path.join(out_dir, f"pre_RGB_{pre_start}_{pre_end}.html")
+    save_folium(pre, aoi, vp["RGB"], f"Pre RGB {pre_label}", outputs["pre_rgb_map"])
+
+    outputs["post_rgb_map"] = os.path.join(out_dir, f"post_RGB_{post_start}_{post_end}.html")
+    save_folium(post, aoi, vp["RGB"], f"Post RGB {post_label}", outputs["post_rgb_map"])
     outputs["pre_ndvi_map"] = os.path.join(out_dir, "pre_NDVI.html")
-    save_folium(pre.select("NDVI"), aoi, vp["NDVI"], "Pre NDVI", outputs["pre_ndvi_map"])
+    save_folium(pre.select("NDVI"), aoi, vp["NDVI"], f"Pre NDVI {pre_label}", outputs["pre_ndvi_map"])
 
     outputs["post_ndvi_map"] = os.path.join(out_dir, "post_NDVI.html")
-    save_folium(post.select("NDVI"), aoi, vp["NDVI"], "Post NDVI", outputs["post_ndvi_map"])
+    save_folium(post.select("NDVI"), aoi, vp["NDVI"], f"Post NDVI {post_label}", outputs["post_ndvi_map"])
 
     outputs["pre_nbr_map"] = os.path.join(out_dir, "pre_NBR.html")
-    save_folium(pre.select("NBR"), aoi, vp["NBR"], "Pre NBR", outputs["pre_nbr_map"])
+    save_folium(pre.select("NBR"), aoi, vp["NBR"], f"Pre NBR {pre_label}", outputs["pre_nbr_map"])
 
     outputs["post_nbr_map"] = os.path.join(out_dir, "post_NBR.html")
-    save_folium(post.select("NBR"), aoi, vp["NBR"], "Post NBR", outputs["post_nbr_map"])
+    save_folium(post.select("NBR"), aoi, vp["NBR"], f"Post NBR {post_label}", outputs["post_nbr_map"])
 
     outputs["dndvi_map"] = os.path.join(out_dir, "dNDVI.html")
-    save_folium(diffs["dNDVI"], aoi, vp["dNDVI"], "dNDVI", outputs["dndvi_map"])
+    save_folium(diffs["dNDVI"], aoi, vp["dNDVI"], f"dNDVI {pre_label}→{post_label}", outputs["dndvi_map"])
 
     outputs["dnbr_map"] = os.path.join(out_dir, "dNBR.html")
-    save_folium(diffs["dNBR"], aoi, vp["dNBR"], "dNBR", outputs["dnbr_map"])
+    save_folium(diffs["dNBR"], aoi, vp["dNBR"], f"dNBR {pre_label}→{post_label}", outputs["dnbr_map"])
 
     outputs["severity_map"] = os.path.join(out_dir, "severity.html")
-    save_folium(severity, aoi, vp["severity"], "dNBR Severity", outputs["severity_map"])
+    save_folium(severity, aoi, vp["severity"], f"dNBR Severity {pre_label}→{post_label}", outputs["severity_map"])
 
     # Summary stats
     summary = {

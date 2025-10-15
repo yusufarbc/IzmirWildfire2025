@@ -44,6 +44,7 @@ def vis_params() -> Dict[str, dict]:
         Her katman adı için min/max ve palette değerleri içeren sözlük.
     """
     return {
+        "RGB": {"bands": ["B4", "B3", "B2"], "min": 0, "max": 3000, "gamma": [1.2, 1.2, 1.2]},
         "NDVI": {"min": -0.2, "max": 0.9, "palette": ["#440154", "#3b528b", "#21908d", "#5dc963", "#fde725"]},
         "NBR": {"min": -0.5, "max": 1.0, "palette": ["#8b0000", "#ff8c00", "#ffff00", "#00ff00", "#006400"]},
         "dNDVI": {"min": -0.6, "max": 0.6, "palette": ["#8b0000", "#ff8c00", "#ffffbf", "#a6d96a", "#1a9850"]},
