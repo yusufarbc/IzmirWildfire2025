@@ -1,9 +1,3 @@
-Harika bir projenin README'si\! Daha okunaklı, bilgilendirici ve profesyonel görünmesi için hiyerarşiyi düzenleyelim ve Markdown özelliklerini kullanarak iyileştirelim.
-
-İşte önerilen yeni README içeriği:
-
------
-
 # KarabukWildfire2025: Uzaktan Algılama ile Orman Yangını Etkisi Analizi
 
 Sentinel-2 uydu görüntüleri kullanılarak 2025 Karabük yangınının etkilerini (yanma şiddeti, hasar) değerlendirmeye yönelik Google Earth Engine (GEE) tabanlı analiz projesi. Normalized Difference Vegetation Index (NDVI), Normalized Burn Ratio (NBR) ve bu indekslerin değişimleri (dNDVI, dNBR) hesaplanmıştır.
