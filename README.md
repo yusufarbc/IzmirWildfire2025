@@ -2,6 +2,12 @@
 
 Sentinel-2 uydu görüntüleri kullanılarak 2025 Karabük yangınının etkilerini (yanma şiddeti, hasar) değerlendirmeye yönelik Google Earth Engine (GEE) tabanlı analiz projesi. Normalized Difference Vegetation Index (NDVI), Normalized Burn Ratio (NBR) ve bu indekslerin değişimleri (dNDVI, dNBR) hesaplanmıştır.
 
+## 🔗 Canlı Demo ve Sonuçlar
+
+Analiz çıktılarına ve interaktif haritalara aşağıdaki linkten ulaşabilirsiniz:
+
+➡️ **[PROJE SONUÇLARI (GITHUB PAGES)](https://yusufarbc.github.io/KarabukWildfire2025/)**
+
 ## 🚀 Proje İçeriği ve Yapısı
 
 | Klasör/Dosya | Açıklama |
@@ -9,6 +15,7 @@ Sentinel-2 uydu görüntüleri kullanılarak 2025 Karabük yangınının etkiler
 | `src/` | **Analiz Kodları:** GEE tabanlı analiz hattı (`pipeline.py`), CLI arayüzü (`cli.py`), yardımcı fonksiyonlar ve görselleştirme araçları. |
 | `paper/` | **Çalışma Raporu:** Projenin metodolojisini, sonuçlarını ve değerlendirmesini içeren bilimsel rapor (LaTeX formatında). |
 | `results/` | **Çıktılar:** Üretilen haritalar, özet istatistikler ve diğer analiz sonuçları. **(**`*.gitignore`\*\* ile git takibinden çıkarılmıştır.)\*\* |
+| `data/` | **Girdiler:** Analiz Alanı (AOI) GeoJSON dosyası (`aoi.geojson`). |
 | `requirements.txt` | Proje için gerekli Python kütüphaneleri. |
 
 ## ⚙️ Kurulum
@@ -83,14 +90,8 @@ python -m src.cli \
 
 ### Örnek Çıktılar
 
-Başarılı bir çalıştırmanın ardından `results/` klasöründe aşağıdaki dosyalar oluşacaktır:
-
-  - `pre_rgb.html`, `post_rgb.html` (Öncesi/Sonrası Gerçek Renkli Görüntüler)
-  - `ndvi.html`, `nbr.html`
-  - `d_ndvi.html`, `d_nbr.html`
-  - `severity_map.html` (Yanma Şiddeti Sınıflandırması)
-  - `summary_stats.csv` (Yanma sınıfı alanları ve istatistikler)
+Başarılı bir çalıştırmanın ardından `results/` klasöründe HTML haritalar (pre/post RGB, NDVI, NBR; dNDVI, dNBR; severity) ve `results/summary_stats.csv` dosyaları oluşur. Bu çıktılara yerel olarak erişmek için `results/index.html` dosyasını kullanabilirsiniz.
 
 ## 📝 Lisans
 
-Bu proje MIT lisansı altındadır. Detaylar için `LICENSE` dosyasına bakınız.
+Bu proje [Lisans Türü - Örn: MIT] lisansı altındadır. Detaylar için `LICENSE` dosyasına bakınız.
