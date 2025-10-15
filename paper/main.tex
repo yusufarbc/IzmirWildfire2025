@@ -4,14 +4,24 @@
 \usepackage[T1]{fontenc}
 \usepackage[english, turkish]{babel}
 \usepackage{geometry}
-\geometry{margin=2.5cm}
+\geometry{margin=2cm}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=blue,
+  pdftitle={KarabukWildfire2025: Sentinel-2 ile NDVI/NBR Tabanlı Yangın Etki Analizi},
+  pdfauthor={Yusuf Talha ARABACI}
+}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{amsmath}
+\usepackage{float} % For [H] placement
+\usepackage[section]{placeins} % Keep floats within their sections
 
 \title{KarabukWildfire2025: Sentinel-2 ile NDVI/NBR Tabanlı Yangın Etki Analizi}
 \author{Yusuf Talha ARABACI\\Karabük Üniversitesi\\Yüksek Lisans, Yazılım Mühendisliği Öğrencisi}
@@ -37,6 +47,8 @@ gerçekleştirilmiştir. Sonuçlar, doğal renk (RGB) ve tematik haritalar ile �
 eşliğinde sunulmaktadır. Yaklaşım, uzaktan algılama temelli hızlı durum değerlendirmesi ve
 afet sonrası planlama süreçlerine katkı sağlamayı amaçlamaktadır.
 \end{abstract}
+
+\noindent\textbf{Anahtar Kelimeler:} Sentinel-2, NDVI, NBR, dNBR, yangın şiddeti, uzaktan algılama, Karabük.
 
 \clearpage
 
@@ -76,10 +88,10 @@ yangından etkilenen alanları ortaya koymaktır.
 \section{Görüntü İşleme Teknikleri}
 Bu bölüm, Sentinel-2 L2A verileriyle yangın etkisinin haritalanmasına yönelik ön işleme, indeks türetimi ve fark analizi adımlarını biçimsel olarak sunar.
 
-\subsection*{Ön İşleme ve Kompozit Üretimi}
+\subsection{Ön İşleme ve Kompozit Üretimi}
 Çalışmada \emph{COPERNICUS/S2\_SR\_HARMONIZED} koleksiyonu, AOI ve tarih aralıkları ile filtrelenmiştir. Piksel düzeyinde kalite iyileştirmesi için QA60 bandındaki 10. (bulut) ve 11. (sirrus) bitleri sıfır olan pikseller geçerli kabul edilmiştir. Her dönem için maske sonrası median kompozit üretilerek tekil bulut/duman kalıntıları ve uç değerlerin etkisi azaltılmıştır. Bu seçim, farklı çekim tarihlerinin istatistiksel sağlam bir temsilini sağlar ve fark indekslerinin yorumlanabilirliğini artırır.
 
-\subsection*{İndeks Türetimi (NDVI, NBR)}
+\subsection{İndeks Türetimi (NDVI, NBR)}
 Bitki örtüsü ve yanıklık duyarlılıkları için iki klasik fark indeksi kullanılmıştır:
 \begin{equation}
 \mathrm{NDVI} = \frac{\mathrm{NIR}-\mathrm{RED}}{\mathrm{NIR}+\mathrm{RED}}\,, \quad \text{(S2: NIR=B8, RED=B4)}
@@ -89,7 +101,7 @@ Bitki örtüsü ve yanıklık duyarlılıkları için iki klasik fark indeksi ku
 \end{equation}
 NDVI \([-1,1]\) aralığında boyutsuz bir ölçüttür vejetasyonun göreli canlılık/yoğunluğunu yansıtır. NBR, NIR azalışı ve SWIR2 artışı bir aradayken büyüyen yangın etkisine duyarlıdır; yangın öncesi yüksek, sonrası düşük olması beklenir.
 
-\subsection*{Fark İndeksleri ve İşaret Sözleşmeleri}
+\subsection{Fark İndeksleri ve İşaret Sözleşmeleri}
 Öncesi/sonrası kompozitlerden türetilen farklar aşağıdaki gibi tanımlanmıştır:
 \begin{align}
 \mathrm{dNDVI} &= \mathrm{NDVI}_{\text{sonra}} - \mathrm{NDVI}_{\text{önce}}\\
@@ -97,17 +109,14 @@ NDVI \([-1,1]\) aralığında boyutsuz bir ölçüttür vejetasyonun göreli can
 \end{align}
 Bu tanım uyarınca \(\mathrm{dNDVI}<0\) genel vejetasyon kaybına; \(\mathrm{dNBR}>0\) ise yanıklık şiddetindeki artışa işaret eder. İndekslerin tek tek yorumundan ziyade birlikte değerlendirilmesi (ör. \(\mathrm{dNDVI}<0\) \emph{ve} \(\mathrm{dNBR}>0\)) daha güçlü kanıt sağlar.
 
-\subsection*{Yanıklık Şiddeti ve Eşikleme}
+\subsection{Yanıklık Şiddeti ve Eşikleme}
 \(\mathrm{dNBR}\) için eşik temelli bir sınıflandırma kullanılmış; 0--4 arası tamsayı kodlar ile "yanıksız/düşük"ten "yüksek"e uzanan kategoriler üretilmiştir. Bu çalışmada kullanılan varsayılan eşikler literatürde yaygın aralıklara dayanır ve yerel koşullara göre kalibre edilebilir (eşik tablosu ve sınıf açıklamaları ayrıca sunulmuştur).
 
-\subsection*{Sınırlılıklar ve En İyi Uygulamalar}
-İndeksler; atmosferik kalıntılar, aydınlatma geometrisi, toprak arka planı, mevsimsellik (fenoloji), su/yapay yüzeyler ve duman kalıntılarından etkilenebilir. Bu nedenle (i) bulut/sirrus maskesi, (ii) uygun kompozit penceresi ve (iii) fark indekslerinin birlikte kullanımı kritik önemdedir. Eşikler saha gözlemleriyle uyarlanmalı; yorumlar tematik haritalar, sınıf dağılımları ve özet istatistiklerle birlikte ele alınmalıdır.
-
-\subsection*{Neden NDVI ve NBR?}
-NDVI ve NBR, yangın etkisi ve bitki örtüsü değişimi çalışmalarında en yaygın ve yorumlanabilir iki gösterge olup; dNDVI/dNBR fark çiftleri birlikte kullanıldığında yanıklık ve vejetasyon kaybını aynı anda yakalayabilmektedir. Gerekli bantların Sentinel-2 L2A'da düzenli bulunması ve eşikleme yaklaşımının sahayla kolay kalibre edilebilmesi, yöntemin pratik uygulanabilirliğini artırır. Alternatif fark metrikleri (ör. \emph{RdNBR}) ileride karşılaştırmalı olarak değerlendirilebilir.
+\subsection{İndeks Seçimi ve Sınırlılıklar}
+NDVI ve NBR, yangın etkisi ve bitki örtüsü değişimi çalışmalarında yaygın ve yorumlanabilir iki göstergedir; dNDVI/dNBR birlikte kullanıldığında yanıklık ve vejetasyon kaybı eşzamanlı olarak yakalanabilir. Gerekli bantların Sentinel-2 L2A'da düzenli bulunması ve eşik temelli sınıflandırmanın sahayla kolay kalibre edilebilmesi yöntemin pratik uygulanabilirliğini artırır. Öte yandan indeksler; atmosferik kalıntılar, aydınlatma geometrisi, toprak arka planı, mevsimsellik (fenoloji), su/yapay yüzeyler ve duman kalıntılarından etkilenebilir. Bu nedenle (i) bulut/sirrus maskesi, (ii) uygun kompozit penceresi ve (iii) fark indekslerinin birlikte kullanımı kritik önemdedir. Eşikler saha gözlemleriyle uyarlanmalı; yorumlar tematik haritalar, sınıf dağılımları ve özet istatistiklerle birlikte ele alınmalıdır. Alternatif fark metrikleri (örn. \emph{RdNBR}) ileride karşılaştırmalı olarak değerlendirilebilir.
 
 \clearpage
-\section*{Yöntem}
+\section{Yöntem}
 Bu çalışmada kullanılan iş akışı aşağıdaki adımlardan oluşur:
 \begin{itemize}
   \item Tarih aralıklarının seçimi ve veri erişimi
@@ -119,7 +128,7 @@ Bu çalışmada kullanılan iş akışı aşağıdaki adımlardan oluşur:
 \end{itemize}
 Sınıflandırma eşikleri temsili olup AOI/saha koşullarına göre kalibre edilebilir.
 
-\subsection*{Analiz Hattı (pipeline.py)}
+\subsection{Analiz Hattı ve Uygulama Altyapısı}
 Çalışmadaki analiz süreci \texttt{src/pipeline.py} içinde tanımlı \texttt{run\_pipeline} işleviyle otomatikleştirilmiştir. Başlıca adımlar ve üretilen çıktılar şöyledir:
 \begin{itemize}
   \item \textbf{Başlatma ve AOI:} \texttt{ee\_init} ile Google Earth Engine başlatılır; \texttt{get\_aoi} ile AOI GeoJSON'dan (yoksa varsayılan bbox) yüklenir.
@@ -133,23 +142,18 @@ Sınıflandırma eşikleri temsili olup AOI/saha koşullarına göre kalibre edi
 
 Bu çalışmada pipeline, öncesi için \texttt{2025-07-10--2025-07-25}, sonrası için \texttt{2025-07-26--2025-08-10} tarih aralıklarıyla çalıştırılmıştır. Üretilen \texttt{results/summary\_stats.csv} dosyasındaki değerler rapordaki özet istatistik tablosu ve yorumlarda kullanılmıştır.
 
-\noindent \emph{Komut satırından örnek kullanım:}
-
-\noindent\texttt{python -m src.cli --pre-start 2025-07-10 --pre-end 2025-07-25 --post-start 2025-07-26 --post-end 2025-08-10 --aoi data/aoi.geojson --out results}
-
-\subsection*{Uygulama Modülleri (src/)}
-Pipeline adımlarını destekleyen başlıca modüller:
+\noindent\textbf{Kod Modülleri (src/):} Pipeline adımlarını destekleyen başlıca modüller aşağıdadır.
 \begin{itemize}
-  \item \textbf{\texttt{src/gee/preprocess.py}}: Sentinel-2 L2A koleksiyonunun filtrelenmesi, QA60 bulut/sirrus maskesi ve median kompozit üretimi.
-  \item \textbf{\texttt{src/gee/indices.py}}: NDVI (B8,B4) ve NBR (B8,B12) indeks bantlarının görüntüye eklenmesi (\texttt{with\_indices}).
-  \item \textbf{\texttt{src/gee/change.py}}: dNDVI/dNBR farklarının hesaplanması (\texttt{compute\_diffs}) ve dNBR eşiklerine göre 0--4 şiddet sınıflarının üretilmesi (\texttt{classify\_dnbr}).
-  \item \textbf{\texttt{src/visualize.py}}: Görselleştirme parametreleri (\texttt{vis\_params}), folium haritalarının yazımı (\texttt{save\_folium}), AOI ortalamasının alınması (\texttt{reduce\_mean}), özet CSV (\texttt{write\_summary\_csv}) ve rapor PNG dışa aktarımları.
-  \item \textbf{\texttt{src/utils.py}}: GEE başlatma (\texttt{ee\_init}), klasör oluşturma (\texttt{ensure\_dir}), AOI GeoJSON yükleme (\texttt{load\_aoi\_geojson}).
+  \item \textbf{\texttt{src/gee/preprocess.py}}: Sentinel-2 L2A filtreleme, QA60 bulut/sirrus maskesi, median kompozit.
+  \item \textbf{\texttt{src/gee/indices.py}}: NDVI (B8,B4) ve NBR (B8,B12) indeks bantları; \texttt{with\_indices} yardımcıları.
+  \item \textbf{\texttt{src/gee/change.py}}: \texttt{compute\_diffs} (dNDVI/dNBR) ve \texttt{classify\_dnbr} (0--4 sınıflar).
+  \item \textbf{\texttt{src/visualize.py}}: \texttt{vis\_params}, \texttt{save\_folium}, \texttt{reduce\_mean}, \texttt{write\_summary\_csv}, PNG dışa aktarımlar.
+  \item \textbf{\texttt{src/utils.py}}: \texttt{ee\_init}, \texttt{ensure\_dir}, \texttt{load\_aoi\_geojson}.
   \item \textbf{\texttt{src/gee/aoi.py}}: AOI'nin GeoJSON'dan veya varsayılan Karabük bbox'ından elde edilmesi.
-  \item \textbf{\texttt{src/cli.py}}: Komut satırı arabirimi; \texttt{run\_pipeline} çağrısı için argüman ayrıştırma ve yürütme.
+  \item \textbf{\texttt{src/cli.py}}: Komut satırı arabirimi; \texttt{run\_pipeline} çağrısı.
 \end{itemize}
 
-\subsection*{Parametre Seçimleri ve Uygulama Ayrıntıları}
+\subsection{Parametre Seçimleri ve Uygulama Ayrıntıları}
 \begin{itemize}
   \item \textbf{Bulut eşiği:} Koleksiyon seçiminde \texttt{CLOUDY\_PIXEL\_PERCENTAGE} $<20$
   filtresi uygulanmış, ardından QA60 bitleriyle piksel düzeyinde bulut/sirrus maskesi
@@ -160,7 +164,7 @@ Pipeline adımlarını destekleyen başlıca modüller:
   olup yerel AOI’ye/saha gözlemlerine göre kalibre edilebilir.
 \end{itemize}
 
-\subsection*{Yanıklık Şiddeti Sınıflandırması}
+\subsection{Yanıklık Şiddeti Sınıflandırması}
 \begin{table}[h]
   \centering
   \begin{tabular}{@{}lll@{}}\toprule
@@ -174,17 +178,7 @@ Pipeline adımlarını destekleyen başlıca modüller:
   \caption{dNBR eşikleri ile önerilen şiddet sınıfları (örnek).}
 \end{table}
 
-\subsection*{Ana Bulgular}
-\begin{itemize}
-  \item AOI genelinde yangın etkisi \emph{çoğunlukla çok düşük/düşük} düzeydedir (\(\overline{\mathrm{dNBR}} \approx 0.07\)).
-  \item Öncesi NDVI \(\sim0.54\)'ten \(\sim0.47\)'ye düşmüştür (mutlak \(\sim0.06\), bağıl \(\sim11{-}12\%\)); bu, yeşil örtüde sınırlı ama yaygın azalmaya işaret eder.
-  \item Etki mekânsal olarak heterojendir; daha yüksek şiddetli cepler mevcuttur ve haritalarla (\ref{fig:diffs}) birlikte yorumlanmalıdır.
-  \item Restorasyon/izleme öncelikleri, şiddet sınıfları \(\geq\) orta eşiklere karşılık gelen ceplere yönlendirilmelidir; zaman içinde iyileşme trendleri ek zaman dilimleriyle izlenmelidir.
-\end{itemize}
 
-\paragraph{Somut Yorum} Ortalama NDVI’daki \(\sim0.06\) mutlak düşüş, bağıl olarak \(\sim11{-}12\%\) düzeyindedir; \(\mathrm{dNBR} \approx 0.07\) ise baskın olarak düşük şiddet sınıflarını işaret eder. Bu, etki şiddetinin genel olarak sınırlı olduğu; ancak mekânsal olarak daha yüksek şiddetli ceplerin mevcut olabileceği anlamına gelir. Restorasyon/izleme öncelikleri bu ceplere odaklanmalıdır.
-
-\paragraph{Somut Yorum} Ortalama NDVI’daki düşüş mutlak \(\sim0.06\) olup, bağıl olarak yaklaşık \(\frac{0.06}{0.54} \approx 11{-}12\%\) düzeyindedir. Ortalama \(\mathrm{dNBR} \approx 0.07\) eşiğe göre çoğunlukla \emph{çok düşük/düşük} şiddete karşılık gelir. Bu bulgular, AOI genelinde yangın etkisinin sınırlı ve yer yer cepler halinde yoğunlaşan bir desen gösterdiğini; öncelikli müdahale/izleme alanlarının daha yüksek şiddetli ceplerle sınırlı olabileceğini düşündürmektedir.
 
 Bu bölümde sunulan özet, yangın öncesi ve sonrası bitki örtüsü durumunu (NDVI) ve yangın etkisini (dNBR) nicel olarak ifade eder. NDVI 0 ile 1 arasında değer alır; daha yüksek değerler daha yoğun ve sağlıklı bitki örtüsünü gösterir. dNDVI iki tarih arasındaki NDVI farkıdır; negatif değerler yeşil örtüde azalmayı ifade eder. dNBR ise yanma şiddetine duyarlı bir fark ölçütüdür; yaklaşık 0.10--0.27 aralığı düşük, 0.27--0.44 aralığı orta, 0.44 ve üzeri daha yüksek şiddet seviyelerine karşılık gelir. Tablodaki ortalamalar, AOI genelinde yangın sonrası NDVI’da yaklaşık 0.06 birimlik düşüş (yaklaşık 0.54'ten 0.47'ye; \(dNDVI<0\)) ve \(dNBR \approx 0.07\) ile çoğunlukla çok düşük/düşük şiddet sinyaline işaret etmektedir. Ancak bu değerler mekânsal farklılıkları düzler; yer yer daha yüksek şiddetli cepler bulunabilir. Bu nedenle yorum, şiddet haritaları ve sınıf dağılımı ile birlikte değerlendirilmelidir.
 
@@ -193,8 +187,15 @@ Sınıf piksel sayıları üzerinden alan hesaplanabilir. Örneğin, piksel alan
 hektar cinsinden $A_k/10^4$ ile verilir.
 
 \section{Sonuçlar}
-\subsection*{Harita Yer Tutucuları}
-\begin{figure}[h]
+\subsection{Bulguların Özeti}
+\begin{itemize}
+  \item AOI genelinde yangın etkisi \emph{çoğunlukla çok düşük/düşük} düzeydedir (\(\overline{\mathrm{dNBR}} \approx 0.074\)).
+  \item NDVI \(\approx0.584\)'ten \(\approx0.511\)'e düşmüştür (mutlak \(\approx0.073\), bağıl \(\approx12.5\%\)).
+  \item Etki mekânsal olarak heterojendir; daha yüksek şiddetli cepler mevcuttur ve şiddet haritaları (\ref{fig:diffs}) ile doğrulanmalıdır.
+  \item Toplam yanmış alan: \num{17061.94}\,ha (AOI'nin \(\approx\) \num{17.12}\%\'si; \texttt{burned\_area\_ha}, \texttt{aoi\_area\_ha}).
+\end{itemize}
+\subsection{Haritalar}
+\begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
@@ -208,8 +209,9 @@ hektar cinsinden $A_k/10^4$ ile verilir.
   \end{subfigure}
   \caption{Doğal renk (RGB) karşılaştırması.}
 \end{figure}
+\FloatBarrier
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
@@ -223,8 +225,9 @@ hektar cinsinden $A_k/10^4$ ile verilir.
   \end{subfigure}
   \caption{NDVI karşılaştırması.}
 \end{figure}
+\FloatBarrier
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
@@ -239,20 +242,20 @@ hektar cinsinden $A_k/10^4$ ile verilir.
   \caption{Fark analizi ve şiddet sınıfları.}
 \end{figure}
 
-\subsection*{Özet İstatistikler}
+\subsection{Özet İstatistikler}
 \begin{table}[h]
   \centering
   \begin{tabular}{@{}ll@{}}\toprule
   Metrik & Değer \\\midrule
-  Öncesi Ortalama NDVI & 0.54 \\
-  Sonrası Ortalama NDVI & 0.47 \\
-  Ortalama dNDVI & $-0.06$ \\
-  Ortalama dNBR & 0.07 \\\bottomrule
+  Öncesi Ortalama NDVI & 0.584 \\
+  Sonrası Ortalama NDVI & 0.511 \\
+  Ortalama dNDVI & $-0.073$ \\
+  Ortalama dNBR & 0.074 \\\bottomrule
   \end{tabular}
   \caption{AOI genelinde özet istatistikler. Değerler \texttt{../results/summary\_stats.csv} dosyasından alınmıştır.}
 \end{table}
 
-Bu bölümde sunulan özet, yangın öncesi ve sonrası bitki örtüsü durumunu (NDVI) ve yangın etkisini (dNBR) nicel olarak ifade eder. NDVI 0 ile 1 arasında değer alır; daha yüksek değerler daha yoğun ve sağlıklı bitki örtüsünü gösterir. dNDVI iki tarih arasındaki NDVI farkıdır; negatif değerler yeşil örtüde azalmayı ifade eder. dNBR ise yanma şiddetine duyarlı bir fark ölçütüdür; yaklaşık 0.10--0.27 aralığı düşük, 0.27--0.44 aralığı orta, 0.44 ve üzeri daha yüksek şiddet seviyelerine karşılık gelir. Tablodaki ortalamalar, AOI genelinde yangın sonrası NDVI’da yaklaşık 0.06 birimlik düşüş (yaklaşık 0.54'ten 0.47'ye; \(dNDVI<0\)) ve \(dNBR \approx 0.07\) ile çoğunlukla çok düşük/düşük şiddet sinyaline işaret etmektedir. Ancak bu değerler mekânsal farklılıkları düzler; yer yer daha yüksek şiddetli cepler bulunabilir. Bu nedenle yorum, şiddet haritaları ve sınıf dağılımı ile birlikte değerlendirilmelidir.
+Bu bölümde sunulan özet, yangın öncesi ve sonrası bitki örtüsü durumunu (NDVI) ve yangın etkisini (dNBR) nicel olarak ifade eder. NDVI 0 ile 1 arasında değer alır; daha yüksek değerler daha yoğun ve sağlıklı bitki örtüsünü gösterir. dNDVI iki tarih arasındaki NDVI farkıdır; negatif değerler yeşil örtüde azalmayı ifade eder. dNBR ise yanma şiddetine duyarlı bir fark ölçütüdür; yaklaşık 0.10--0.27 aralığı düşük, 0.27--0.44 aralığı orta, 0.44 ve üzeri daha yüksek şiddet seviyelerine karşılık gelir. Tablodaki ortalamalar, AOI genelinde NDVI’da \(\sim0.073\) birimlik düşüş (yaklaşık 0.584'ten 0.511'e; \(dNDVI<0\), bağıl \(\sim12.5\%\)) ve \(dNBR \approx 0.074\) ile çoğunlukla çok düşük/düşük şiddet sinyaline işaret etmektedir. Ancak bu değerler mekânsal farklılıkları düzler; yer yer daha yüksek şiddetli cepler bulunabilir. Bu nedenle yorum, şiddet haritaları ve sınıf dağılımı ile birlikte değerlendirilmelidir.
 
 Etkilenen alan büyüklükleri, sınıf piksel sayıları ve/veya eşiklerin literatürle
 karşılaştırılması ek bir tablo olarak verilebilir.
@@ -275,359 +278,6 @@ Harita görselleri, \texttt{analysis.ipynb} defterinden otomatik üretilen HTML 
 çıktıları üzerinden alınmıştır. Renk paletleri ve gösterim aralıkları \texttt{src/visualize.py}
 dosyasında \texttt{vis\_params()} fonksiyonunda tanımlıdır.
 
-\section{Sonuç ve Tartışma}
-Sunulan yöntem, GEE üzerinde hızlı ve tekrarlanabilir bir akışla yangın etkilerini
-haritalandırmaktadır. Eşiklerin saha verileri ile kalibre edilmesi ve farklı
-zaman aralıklarının denenmesiyle, hem doğruluk hem de yorumlanabilirlik artacaktır.
-Gelecek çalışmalarda, \emph{Relative dNBR (RdNBR)} ve arazi örtüsü sınıflarıyla
-birleşik değerlendirmeler önerilir.
 
 \end{document}
-% !TeX program = pdflatex
-\documentclass[11pt,a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[turkish]{babel}
-\usepackage{geometry}
-\geometry{margin=2.5cm}
-\usepackage{graphicx}
-\usepackage{subcaption}
-\usepackage{booktabs}
-\usepackage{siunitx}
-\usepackage{amsmath}
-\usepackage{microtype}
-\usepackage{caption}
-\usepackage{hyperref}
-\graphicspath{{../results/}}
-\captionsetup[table]{position=bottom}
-\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue}
 
-\title{KarabukWildfire2025: Sentinel-2 ile NDVI/NBR Tabanlı Yangın Etki Analizi}
-\author{Yusuf Talha ARABACI\\Karabük Üniversitesi\\Yüksek Lisans, Yazılım Mühendisliği }
-\date{Tarih: \today}
-
-\begin{document}
-\maketitle
-\thispagestyle{empty}
-\clearpage
-\tableofcontents
-\clearpage
-
-\begin{abstract}
-Bu çalışma, 2025 Karabük orman yangınının etkilerini Sentinel-2 L2A verileri kullanılarak
-NDVI ve NBR indeksleri üzerinden incelemektedir. Yangın öncesi ve sonrası dönemler için
-bulut maskeleme ve median kompozit uygulandıktan sonra NDVI/NBR bantları hesaplanmış,
-fark indeksleri (dNDVI, dNBR) türetilmiş ve dNBR eşiklerine dayalı bir şiddet sınıflandırması
-gerçekleştirilmiştir. Sonuçlar, doğal renk (RGB) ve tematik haritalar ile özet istatistikler
-eşliğinde sunulmaktadır. Yaklaşım, uzaktan algılama temelli hızlı durum değerlendirmesi ve
-afet sonrası planlama süreçlerine katkı sağlamayı amaçlamaktadır.
-\end{abstract}
-\noindent\textbf{Anahtar Kelimeler:} Karabük, orman yangını, Sentinel-2, NDVI, NBR, dNBR, Google Earth Engine
-
-\par\medskip
-% English abstract (Abstract)
-\selectlanguage{english}
-\renewcommand{\abstractname}{Abstract}
-\begin{abstract}
-This study analyzes the impacts of the 2025 Karabük wildfire using Sentinel-2 L2A data. We compute NDVI and NBR for pre- and post-fire periods, derive difference indices (dNDVI, dNBR), and perform a threshold-based burn severity classification on dNBR. Cloud and cirrus masking (QA60) and median compositing are applied for each period. Results are presented with true-color (RGB) and thematic maps and area-wide summary statistics. The workflow, implemented on Google Earth Engine, aims to support rapid situational assessment and post-fire planning.
-\end{abstract}
-\noindent\textbf{Keywords:} Karabuk, wildfire, Sentinel-2, NDVI, NBR, dNBR, Google Earth Engine
-\selectlanguage{turkish}
-\clearpage
-
-\section{Giriş}
-2025 Karabük orman yangınlarının ekosistem, toprak ve yerleşimler üzerindeki etkilerinin
-nicel ve mekânsal olarak ortaya konması; yangın sonrası rehabilitasyon, yeniden
-ormanlaştırma ve risk azaltma planlamaları açısından kritik öneme sahiptir. Uzaktan
-algılama, yüksek zamansal ve mekânsal çözünürlükte tekrarlanan gözlemleri mümkün kılarak
-yangın öncesi/sonrası karşılaştırmalı analizlerin sistematik biçimde yürütülmesine imkân
-tanır. Bu çalışma, Sentinel-2 L2A verileriyle \emph{Normalized Difference Vegetation Index}
-(NDVI) ve \emph{Normalized Burn Ratio} (NBR) indekslerine dayanan bir yaklaşım
-sunmaktadır; fark indeksleri (dNDVI, dNBR) ve eşik tabanlı şiddet sınıflandırması ile
-etki alanı haritaları üretilmektedir.
-
-\section{Çalışma Alanı (AOI)}
-Çalışma alanı, Karabük ili Ovacık--Eskipazar çevresi ve doğuda Çankırı sınırına
-komşu bir bölgeyi kapsamaktadır. AOI, depo kökünde yer alan \texttt{src/aoi.geojson}
-dosyasında çokgen (Polygon) olarak tanımlanmıştır. Bu AOI, yangınla doğrudan ilişkili
-alanları kapsayacak şekilde iteratif olarak daraltılmış ve sonuç analizlerinde esas
-alınmıştır.
-
-\section{Proje Amacı}
-Bu çalışmanın amacı, yangın öncesi ve sonrası dönemler için NDVI ve NBR indekslerini
-hesaplayarak, fark (dNDVI, dNBR) analizi ve basit bir şiddet sınıflandırması ile
-yangından etkilenen alanları ortaya koymaktır.
-\paragraph{Araştırma Soruları} (i) Yangın sonrasında AOI genelinde vejetasyon canlılığındaki
-değişim (dNDVI) nedir ve mekânsal dağılımı nasıldır? (ii) dNBR temelli şiddet sınıfları
-hangi bölgelerde yoğunlaşmaktadır? (iii) Hangi sınıflar alan açısından baskındır ve bu
-dağılım, saha/yerel bilgiyle tutarlı mıdır?
-
-\section{Veri Kaynakları}
-\textbf{Uydu verisi:} Sentinel-2 Level-2A atmosferik olarak düzeltilmiş yansıtım
-ürünleri; mekânsal çözünürlük 10--20 m. Bu çalışmada NDVI için B8 (NIR) ve B4 (RED),
-NBR için B8 (NIR) ve B12 (SWIR2) bantları kullanılmıştır.\par
-\textbf{Platform:} Google Earth Engine (GEE) Python API, geniş hacimli veri erişimi ve
-dağıtık hesaplama altyapısı ile iş akışının ölçeklenebilir yürütümünü sağlar \cite{Drusch2012}.\par
-\textbf{Bulut maskesi:} Sentinel-2 QA60 kalite bandındaki 10. (bulut) ve 11. (sirrus)
-bitleri sıfır olan pikseller geçerli kabul edilmiştir.\par
-\textbf{Kompozit:} Her dönem için median kompozit, tekil bulut kalıntılarını ve uç
-değerleri azaltmak üzere tercih edilmiştir.
-
-\section{Görüntü İşleme Teknikleri}
-\subsection*{NDVI}
-\begin{equation}
-\mathrm{NDVI} = \frac{\mathrm{NIR}-\mathrm{RED}}{\mathrm{NIR}+\mathrm{RED}}\,, \quad
-\text{(S2: NIR=B8, RED=B4)}
-\end{equation}\, (bkz. \cite{Rouse1973})
-\subsection*{NBR}
-\begin{equation}
-\mathrm{NBR} = \frac{\mathrm{NIR}-\mathrm{SWIR2}}{\mathrm{NIR}+\mathrm{SWIR2}}\,, \quad
-\text{(S2: NIR=B8, SWIR2=B12)}
-\end{equation}\, (bkz. \cite{KeyBenson2006})
-\subsection*{Fark İndeksleri}
-\begin{align}
-\mathrm{dNDVI} &= \mathrm{NDVI}_{\text{sonra}} - \mathrm{NDVI}_{\text{önce}}\\
-\mathrm{dNBR}  &= \mathrm{NBR}_{\text{önce}} - \mathrm{NBR}_{\text{sonra}}
-\end{align}
-Pozitif dNBR değerleri yanıklığın arttığı bölgeleri işaret ederken, negatif dNDVI
-değerleriyle birlikte yorumlandığında vejetasyon kaybına ilişkin güçlü kanıt sağlar.
-
-\subsection*{NDVI ve NBR: Tanım, Yorum ve Sınırlılıklar}
-\textbf{NDVI} (Normalized Difference Vegetation Index), \([-1,1]\) aralığında
-boyutsuz bir ölçüttür vejetasyonun göreli canlılık ve yoğunluğunu yansıtır.
-Genellikle \(0.5{-}0.9\) aralığı sağlıklı/yoğun bitki örtüsünü, orta değerler karışık
-örtü/çıplak toprak etkisini, düşük/negatif değerler ise su/kar/çıplak kaya ve yapay
-yüzeyleri işaret eder. \textbf{NBR} (Normalized Burn Ratio) ise yangın sonrası
-gözlenen spektral değişimlere (NIR azalışı, SWIR2 artışı) duyarlıdır; yangın öncesi
-yüksek, sonrası düşük olması beklenir. \textbf{dNBR} tanımı gereği pozitif ve büyük
-değerler daha yüksek yanıklık şiddetine karşılık gelir. Her iki indeks de atmosferik
-koşullar, toprak arka planı, aydınlatma geometrisi ve sensör/saha farklılıklarından
-etkilenebilir; bu nedenle fark indeksleri (önce/sonra) ve maskeleme/kompozit adımları
-yorumlanabilirliği güçlendirir.
-
-\subsection*{Neden NDVI ve NBR?}
-Bu çalışma, \textbf{NDVI} ve \textbf{NBR} indekslerini tercih etmiştir çünkü:
-\begin{itemize}
-  \item \textbf{Yaygın ve kanıtlı kullanım:} Yangın etkisi ve bitki örtüsü değişimi çalışmalarında literatürde en yaygın iki fark indikatörüdür (dNDVI, dNBR).
-  \item \textbf{Duyarlılık:} NDVI klorofil/vejetasyon canlılığına duyarlıyken, NBR yanıklık ve yanmış artıkların (NIR düşüşü, SWIR2 artışı) etkisini yakalar.
-  \item \textbf{Uyarlanabilirlik:} dNBR için eşik temelli şiddet sınıflandırma basit ve yorumlanabilirdir; saha verisiyle kolayca kalibre edilebilir.
-  \item \textbf{Erişilebilirlik:} Gerekli bantlar (B8, B4, B12) Sentinel-2 L2A'da 10--20 m çözünürlükte düzenli olarak mevcuttur.
-\end{itemize}
-Alternatif olarak \emph{EVI}, \emph{SAVI}, \emph{RdNBR} gibi indeksler de değerlendirilebilir; ancak bu çalışmada doğruluğu/yorumlanabilirliği yüksek, uygulaması pratik iki temel indeks üzerinden ilerlemek hedeflenmiştir.
-
-\clearpage
-\section*{Yöntem}
-Bu çalışmada kullanılan iş akışı aşağıdaki adımlardan oluşur:
-\begin{itemize}
-  \item Tarih aralıklarının seçimi ve veri erişimi
-  \item QA60 tabanlı bulut/sirrus maskesinin uygulanması
-  \item Median kompozitlerin üretilmesi (öncesi/sonrası)
-  \item NDVI ve NBR indekslerinin hesaplanması
-  \item dNDVI ve dNBR fark görüntülerinin elde edilmesi
-  \item dNBR eşiklerine dayalı şiddet sınıflandırmasının yapılması
-\end{itemize}
-Sınıflandırma eşikleri temsili olup AOI/saha koşullarına göre kalibre edilebilir.
-
-\subsection*{Analiz Hattı (pipeline.py)}
-Analiz akışı \texttt{src/pipeline.py} içindeki \texttt{run\_pipeline} ile uçtan uca yürütülmüştür. Özetle: (i) GEE başlatma ve AOI yükleme; (ii) öncesi/sonrası median kompozit ve NDVI/NBR hesaplama; (iii) dNDVI/dNBR fark katmanları ve dNBR şiddet sınıfları; (iv) Folium tabanlı haritaların ve \texttt{summary\_stats.csv} özetlerinin yazılması. Çalışmada kullanılan tarih aralıkları: \texttt{2025-07-10--2025-07-25} (öncesi) ve \texttt{2025-07-26--2025-08-10} (sonrası). Çıktılar \texttt{results/} klasörüne kaydedilir ve rapordaki tablo/figürlerde kullanılmıştır.
-
-\subsection*{Uygulama Modülleri (src/)}
-Pipeline adımlarını destekleyen başlıca modüller:
-\begin{itemize}
-  \item \textbf{\texttt{src/gee/preprocess.py}}: Sentinel-2 L2A koleksiyonunun filtrelenmesi, QA60 bulut/sirrus maskesi ve median kompozit üretimi.
-  \item \textbf{\texttt{src/gee/indices.py}}: NDVI (B8,B4) ve NBR (B8,B12) indeks bantlarının görüntüye eklenmesi (\texttt{with\_indices}).
-  \item \textbf{\texttt{src/gee/change.py}}: dNDVI/dNBR farklarının hesaplanması (\texttt{compute\_diffs}) ve dNBR eşiklerine göre 0--4 şiddet sınıflarının üretilmesi (\texttt{classify\_dnbr}).
-  \item \textbf{\texttt{src/visualize.py}}: Görselleştirme parametreleri (\texttt{vis\_params}), folium haritalarının yazımı (\texttt{save\_folium}), AOI ortalamasının alınması (\texttt{reduce\_mean}), özet CSV (\texttt{write\_summary\_csv}) ve rapor PNG dışa aktarımları.
-  \item \textbf{\texttt{src/utils.py}}: GEE başlatma (\texttt{ee\_init}), klasör oluşturma (\texttt{ensure\_dir}), AOI GeoJSON yükleme (\texttt{load\_aoi\_geojson}).
-  \item \textbf{\texttt{src/gee/aoi.py}}: AOI'nin GeoJSON'dan veya varsayılan Karabük bbox'ından elde edilmesi.
-  \item \textbf{\texttt{src/cli.py}}: Komut satırı arabirimi; \texttt{run\_pipeline} çağrısı için argüman ayrıştırma ve yürütme.
-\end{itemize}
-
-\subsection*{Parametre Seçimleri ve Uygulama Ayrıntıları}
-\begin{itemize}
-  \item \textbf{Bulut eşiği:} Koleksiyon seçiminde \texttt{CLOUDY\_PIXEL\_PERCENTAGE} $<20$
-  filtresi uygulanmış, ardından QA60 bitleriyle piksel düzeyinde bulut/sirrus maskesi
-  kullanılmıştır.
-  \item \textbf{Kompozit stratejisi:} Median kompozit, uç değerleri bastırması ve
-  yapay parazitleri azaltması nedeniyle tercih edilmiştir.
-  \item \textbf{Eşikler:} dNBR sınıfları literatürde önerilen aralıklardan uyarlanmış
-  olup yerel AOI’ye/saha gözlemlerine göre kalibre edilebilir.
-\end{itemize}
-
-\subsection*{Yanıklık Şiddeti Sınıflandırması}
-\begin{table}[h]
-  \centering
-  \begin{tabular}{@{}lll@{}}\toprule
-  Sınıf & Kod & dNBR Eşiği \\\midrule
-  Yanıksız/Düşük & 0 & $\leq 0.10$ \\
-  Düşük & 1 & $(0.10,\,0.27]$ \\
-  Orta--Düşük & 2 & $(0.27,\,0.44]$ \\
-  Orta--Yüksek & 3 & $(0.44,\,0.66]$ \\
-  Yüksek & 4 & $> 0.66$ \\\bottomrule
-  \end{tabular}
-  \caption{dNBR eşikleri ile önerilen şiddet sınıfları (örnek).}
-\end{table}
-
-Sınıf piksel sayıları üzerinden alan hesaplanabilir. Örneğin, piksel alanı \SI{100}{m\textsuperscript{2}}
-(10 m çözünürlükte) ise, sınıf alanı $A_k = n_k \times 100\,\mathrm{m^2}$ olup
-hektar cinsinden $A_k/10^4$ ile verilir.
-
-\section{Sonuçlar}
-\subsection*{Harita Yer Tutucuları}
-\begin{figure}[h]
-  \centering
-  \begin{subfigure}[b]{0.48\textwidth}
-    \centering
-    \resizebox{\linewidth}{!}{\includegraphics{pre_RGB.png}}
-    \caption{Öncesi RGB (B4,B3,B2)}
-  \end{subfigure}\hfill
-  \begin{subfigure}[b]{0.48\textwidth}
-    \centering
-    \resizebox{\linewidth}{!}{\includegraphics{../results/post_RGB.png}}
-    \caption{Sonrası RGB (B4,B3,B2)}
-  \end{subfigure}
-  \caption{Doğal renk (RGB) karşılaştırması.}
-  \label{fig:rgb}
-\end{figure}
-
-\begin{figure}[h]
-  \centering
-  \begin{subfigure}[b]{0.48\textwidth}
-    \centering
-    \resizebox{\linewidth}{!}{\includegraphics{../results/pre_NDVI.png}}
-    \caption{Öncesi NDVI}
-  \end{subfigure}\hfill
-  \begin{subfigure}[b]{0.48\textwidth}
-    \centering
-    \resizebox{\linewidth}{!}{\includegraphics{../results/post_NDVI.png}}
-    \caption{Sonrası NDVI}
-  \end{subfigure}
-  \caption{NDVI karşılaştırması.}
-  \label{fig:ndvi}
-\end{figure}
-
-\begin{figure}[h]
-  \centering
-  \begin{subfigure}[b]{0.48\textwidth}
-    \centering
-    \resizebox{\linewidth}{!}{\includegraphics{../results/dNBR.png}}
-    \caption{dNBR}
-  \end{subfigure}\hfill
-  \begin{subfigure}[b]{0.48\textwidth}
-    \centering
-    \resizebox{\linewidth}{!}{\includegraphics{../results/severity.png}}
-    \caption{dNBR Şiddeti (0--4)}
-  \end{subfigure}
-  \caption{Fark analizi ve şiddet sınıfları.}
-  \label{fig:diffs}
-\end{figure}
-
-\subsection*{Özet İstatistikler}
-\begin{table}[h]
-  \centering
-  \begin{tabular}{@{}ll@{}}\toprule
-  Metrik & Değer \\\midrule
-  Öncesi Ortalama NDVI & 0.54 \\
-  Sonrası Ortalama NDVI & 0.47 \\
-  Ortalama dNDVI & $-0.06$ \\
-  Ortalama dNBR & 0.07 \\\bottomrule
-  \end{tabular}
-  \caption{AOI genelinde özet istatistikler. Değerler \texttt{../results/summary\_stats.csv} dosyasından alınmıştır.}
-\end{table}
-
-\paragraph{Yorum ve Anlamlandırma} Öncesi ve sonrası ortalama NDVI değerleri, AOI'deki
-vejetasyonun yangın öncesi göreli canlılık düzeyi ile yangın sonrası durumunu özetler.
-Bu iki değer arasındaki fark \(\Delta\mathrm{NDVI}\) (yaklaşık olarak \(\overline{\mathrm{dNDVI}}\)) negatif ise
-genel vejetasyon kaybına işaret eder; büyüklüğü arttıkça kayıp şiddeti artar. Ortalama
-\(\mathrm{dNDVI}\)'nin negatif olması, piksel ölçeğinde yaygın bir azalma sinyalinin
-biriktiğini gösterir; ancak fenoloji (mevsimsellik), sulak alanlar veya tarımsal hasatlar
-gibi faktörler yorumda dikkate alınmalıdır. Ortalama \(\mathrm{dNBR}\)'nin pozitif olması,
-yanıklık göstergesi olan NBR düşüşünün AOI genelinde baskın olduğunu gösterir. \(\mathrm{dNBR}\)
-değerinin kendisi doğrudan alanı değil, spektral değişim büyüklüğünü temsil eder; alan
- hesapları için sınıf piksel sayıları üzerinden türetim yapılmalıdır.
-
-Bu çalışmada hesaplanan ortalamalar: öncesi NDVI yaklaşık 0.54, sonrası NDVI yaklaşık 0.47, dNDVI yaklaşık -0.06 ve dNBR yaklaşık 0.07'dir. Bu değerler, AOI genelinde çoğunlukla çok düşük/düşük yangın şiddetine işaret etmektedir.
-
-\begin{table}[h]
-  \centering
-  \begin{tabular}{@{}llll@{}}\toprule
-  Sınıf & Kod & Alan (ha) & Piksel Sayısı \\\midrule
-  Yanıksız/Düşük & 0 & -- & -- \\
-  Düşük & 1 & -- & -- \\
-  Orta--Düşük & 2 & -- & -- \\
-  Orta--Yüksek & 3 & -- & -- \\
-  Yüksek & 4 & -- & -- \\\bottomrule
-  \end{tabular}
-  \caption{dNBR şiddet sınıfları için alan ve piksel sayıları. Değerler \texttt{../results/severity\_areas.csv} dosyasındaki \texttt{class\_k\_ha} ve piksel sayıları üzerinden doldurulacaktır. Toplam yanmış alan \texttt{burned\_area\_ha} olarak raporlanır.}
-\end{table}
-
-\paragraph{Yanmış Alan (EE ile kesin)} Bu çalışmada toplam yanmış alan, \emph{Google Earth Engine} üzerinde \(\mathrm{dNBR}\) sınıf rasterında piksel alanı indirgemesi (\texttt{pixelArea}) ile AOI üzerinde hesaplanmakta ve \texttt{../results/severity\_areas.csv} dosyasında \texttt{burned\_area\_ha} olarak raporlanmaktadır. Görsel histogramına dayalı yaklaşık yöntem kullanılmamıştır.
-
-Etkilenen alan büyüklükleri, sınıf piksel sayıları ve/veya eşiklerin literatürle
-karşılaştırılması ek bir tablo olarak verilebilir. RGB karşılaştırmaları (\ref{fig:rgb})
-ve NDVI çiftleri (\ref{fig:ndvi}) mekânsal örüntülerin görsel olarak doğrulanmasına
-yardımcı olurken, dNBR ve şiddet haritaları (\ref{fig:diffs}) farkların büyüklüğü ve
-olası hasar zonlarının ayrımını destekler.
-
-\section{Sınırlılıklar ve Belirsizlikler}
-Bulut ve duman kalıntıları, geometrik/atmosferik kalıntı hataları ve sınıflandırma
-eşiklerinin genellenebilirliği sonuçları etkileyebilir. dNBR eşikleri AOI'ye ve saha
-gözlemlerine göre kalibre edilmelidir. Kompozit stratejisinin (median) seçimi mekânsal
-özgüllük ve bulutluluk koşullarına bağlıdır.
-
-\section{Tartışma ve Gelecek Çalışmalar}
-Yöntem, GEE altyapısıyla hızlı ve tekrarlanabilir analiz sağlar. Gelecekte RdNBR gibi
-normalize edilmiş fark metriklerinin denenmesi; arazi örtüsü/sınıf bilgisi ile
-birleştirilmiş analizler ve saha verisiyle karşılaştırmalı doğrulama, karar destek
-perspektifinden yöntemin değerini artıracaktır. Ayrıca farklı sensörlerle (Landsat,\,Sentinel-1)
-çoklu-kaynak yaklaşımı geliştirilerek zamansal kapsam ve sağlamlık genişletilebilir.
-
-\section{Görselleştirme}
-Harita görselleri, \texttt{analysis.ipynb} defterinden otomatik üretilen HTML ve PNG
-çıktıları üzerinden alınmıştır. Renk paletleri ve gösterim aralıkları \texttt{src/visualize.py}
-dosyasında \texttt{vis\_params()} fonksiyonunda tanımlıdır.
-
-\section{Veri ve Kod Erişimi}
-Analiz akışı ve üretimler depo kökünde yer alan \texttt{analysis.ipynb} defteri ve
-\texttt{src/} altındaki Python modülleri üzerinden yinelenebilir. Harita ve rapor
-görselleri \texttt{results/} dizininde üretilmektedir. AOI tanımı \texttt{src/aoi.geojson}
-dosyasında sağlanmıştır.
-
-\subsection*{Jupyter Defteri (analysis.ipynb)}
-Bu defter, kurulumdan çıktılara kadar tek akışta çalışacak şekilde yapılandırılmıştır:
-\begin{itemize}
-  \item \textbf{0. Önkoşullar:} Sanal ortam kurulumu ve \texttt{pip install -r requirements.txt} ile bağımlılıkların yüklenmesi.
-  \item \textbf{1. GEE kimlik doğrulama:} \texttt{earthengine authenticate} (veya servis hesabı ortam değişkenleri) sonrası \texttt{ee\_init(project=...)} çağrısı.
-  \item \textbf{Parametreler:} Öncesi/sonrası tarih aralıkları ve \texttt{aoi\_path} (GeoJSON) ile \texttt{out\_dir}.
-  \item \textbf{Pipeline çalıştırma:} \texttt{run\_pipeline(...)} ile HTML haritalar ve \texttt{summary\_stats.csv} üretilir.
-  \item \textbf{Görselleştirme:} HTML haritalar \emph{IFrame + fallback} ile; PNG çıktılar \emph{Image + base64 fallback} ile gösterilir (VS Code uyumlu).
-  \item \textbf{Toplu hücre:} \emph{Toplu çıktı üret ve göster} hücresi, pipeline\,+\,PNG dışa aktarım\,+\,harita/istatistik gösterimini tek adımda yürütür.
-\end{itemize}
-
-\subsection*{Kod Modülleri (src/)}
-Başlıca modüller ve rolleri:
-\begin{itemize}
-  \item \textbf{\texttt{src/cli.py}}: Komut satırı arabirimi; argümanları ayrıştırıp \texttt{run\_pipeline} çağırır.
-  \item \textbf{\texttt{src/pipeline.py}}: Uçtan uca akış; kompozitler, indeksler, farklar, dNBR şiddeti, haritalar ve özet CSV üretimi.
-  \item \textbf{\texttt{src/gee/preprocess.py}}: \texttt{s2\_sr\_collection}, \texttt{mask\_s2\_clouds}, \texttt{composite\_median}, \texttt{prepare\_composite}.
-  \item \textbf{\texttt{src/gee/indices.py}}: NDVI ve NBR bantlarını ekleyen yardımcılar (\texttt{with\_indices}).
-  \item \textbf{\texttt{src/gee/change.py}}: \texttt{compute\_diffs} (dNDVI/dNBR) ve \texttt{classify\_dnbr} (0--4 sınıfları).
-  \item \textbf{\texttt{src/visualize.py}}: \texttt{vis\_params}, \texttt{save\_folium}, \texttt{reduce\_mean}, \texttt{write\_summary\_csv}, \texttt{export\_report\_pngs}, \texttt{export\_truecolor\_pngs}.
-  \item \textbf{\texttt{src/utils.py}}: \texttt{ee\_init} (kullanıcı/servis hesabı), \texttt{ensure\_dir}, \texttt{load\_aoi\_geojson}.
-  \item \textbf{\texttt{src/gee/aoi.py}}: AOI yükleme; GeoJSON yoksa varsayılan Karabük bbox.
-\end{itemize}
-
-\section{Sonuç ve Tartışma}
-Sunulan yöntem, GEE üzerinde hızlı ve tekrarlanabilir bir akışla yangın etkilerini
-haritalandırmaktadır. Eşiklerin saha verileri ile kalibre edilmesi ve farklı
-zaman aralıklarının denenmesiyle, hem doğruluk hem de yorumlanabilirlik artacaktır.
-Gelecek çalışmalarda, \emph{Relative dNBR (RdNBR)} ve arazi örtüsü sınıflarıyla
-birleşik değerlendirmeler önerilir.
-
-\begin{thebibliography}{9}
-\bibitem{Rouse1973} Rouse, J.W., Haas, R.H., Schell, J.A., Deering, D.W. (1973). Monitoring vegetation systems in the Great Plains with ERTS. In: Third ERTS Symposium.
-\bibitem{KeyBenson2006} Key, C.H., Benson, N.C. (2006). Landscape Assessment: Ground measure of severity, the Composite Burn Index; and remote sensing of severity, the Normalized Burn Ratio. In: FIREMON.
-\bibitem{Drusch2012} Drusch, M., et al. (2012). Sentinel-2: ESA's optical high-resolution mission for GMES operational services. Remote Sensing of Environment, 120, 25–36.
-\end{thebibliography}
-
-\end{document}
