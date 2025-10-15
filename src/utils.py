@@ -30,29 +30,42 @@ def _resolve_project(explicit: Optional[str] = None) -> Optional[str]:
 def ee_init(project: Optional[str] = None) -> None:
     """Earth Engine'i kullanıcı veya servis hesabıyla başlatır.
 
-    Ortam değişkenleri (opsiyonel):
-      - EE_SERVICE_ACCOUNT: Servis hesabı e‑posta adresi
-      - EE_PRIVATE_KEY_FILE: JSON anahtar dosya yolu
-      - EE_PROJECT / EARTHENGINE_PROJECT / GOOGLE_CLOUD_PROJECT / GCLOUD_PROJECT: Proje ID
+    Tercih sırası:
+      1) Servis hesabı (EE_SERVICE_ACCOUNT + EE_PRIVATE_KEY_FILE)
+      2) Kullanıcı kimliği (earthengine authenticate)
+
+    Proje ID belirleme:
+      - project argümanı veya ortam değişkenleri (EE_PROJECT / EARTHENGINE_PROJECT / GOOGLE_CLOUD_PROJECT / GCLOUD_PROJECT)
+      - Proje ID bulunamazsa, Initialize() proje parametresi olmadan denenir (kısmi kullanım için yeterli olabilir).
     """
     sa = os.getenv("EE_SERVICE_ACCOUNT")
     key_file = os.getenv("EE_PRIVATE_KEY_FILE")
     project_id = _resolve_project(project)
+
+    def _init_with(creds=None):
+        if project_id:
+            ee.Initialize(credentials=creds, project=project_id)
+        else:
+            # Son çare: projeyi belirtmeden başlat (bazı okuma işlemleri için yeterli olabilir)
+            ee.Initialize(credentials=creds)
+
     try:
         if sa and key_file and os.path.exists(key_file):
             credentials = ee.ServiceAccountCredentials(sa, key_file)
-            ee.Initialize(credentials=credentials, project=project_id)
+            _init_with(credentials)
         else:
             try:
-                # Falls back to stored user credentials (earthengine authenticate)
-                ee.Initialize(project=project_id)
+                _init_with()
             except Exception:
-                # Interactive browser auth if not already authenticated
                 ee.Authenticate()
-                ee.Initialize(project=project_id)
+                _init_with()
     except Exception as e:
-        hint = "; set EE_PROJECT env var or pass project=" if not project_id else ""
-        raise RuntimeError(f"Earth Engine init failed{hint}: {e}")
+        if not project_id:
+            raise RuntimeError(
+                "Earth Engine init failed: Proje ID bulunamadı. EE_PROJECT veya EARTHENGINE_PROJECT ortam değişkenini ayarlayın ya da 'project' parametresi geçin. Orijinal hata: "
+                + str(e)
+            )
+        raise RuntimeError(f"Earth Engine init failed for project '{project_id}': {e}")
 
 
 def ensure_dir(path: str) -> None:

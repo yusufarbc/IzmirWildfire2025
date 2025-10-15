@@ -21,6 +21,7 @@ def parse_args():
     p.add_argument("--aoi", default="data/aoi.geojson", help="AOI GeoJSON dosyası (opsiyonel)")
     p.add_argument("--out", default="results", help="Çıktı klasörü")
     p.add_argument("--area-scale", type=int, default=10, help="Alan indirgeme ölçeği (metre)")
+    p.add_argument("--project", default=None, help="Earth Engine proje ID (opsiyonel)")
     return p.parse_args()
 
 
@@ -35,6 +36,7 @@ def main():
         aoi_geojson=args.aoi,
         out_dir=args.out,
         area_scale=args.area_scale,
+        project=args.project,
     )
     print("Üretilen çıktılar:")
     for k, v in outs.items():
