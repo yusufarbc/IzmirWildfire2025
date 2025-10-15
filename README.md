@@ -7,15 +7,18 @@ Sentinel-2 uydu görüntüleri kullanılarak 2025 Karabük yangınının etkiler
 Analiz çıktılarına ve interaktif haritalara aşağıdaki linkten ulaşabilirsiniz:
 
 ➡️ **[PROJE SONUÇLARI (GITHUB PAGES)](https://yusufarbc.github.io/KarabukWildfire2025/)**
+➡️ **[ANA GİTHUB DEPOSU](https://github.com/yusufarbc/KarabukWildfire2025)**
+
+-----
 
 ## 🚀 Proje İçeriği ve Yapısı
 
 | Klasör/Dosya | Açıklama |
 | :--- | :--- |
-| `src/` | **Analiz Kodları:** GEE tabanlı analiz hattı (`pipeline.py`), CLI arayüzü (`cli.py`), yardımcı fonksiyonlar ve görselleştirme araçları. |
+| `src/` | **Analiz Kodları:** GEE tabanlı analiz hattı (`pipeline.py`), CLI arayüzü (`cli.py`), yardımcı fonksiyonlar ve görselleştirme araçları. (AOI dosyası (`aoi.geojson`) buradadır.) |
 | `paper/` | **Çalışma Raporu:** Projenin metodolojisini, sonuçlarını ve değerlendirmesini içeren bilimsel rapor (LaTeX formatında). |
-| `results/` | **Çıktılar:** Üretilen haritalar, özet istatistikler ve diğer analiz sonuçları. **(**`*.gitignore`\*\* ile git takibinden çıkarılmıştır.)\*\* |
-| `data/` | **Girdiler:** Analiz Alanı (AOI) GeoJSON dosyası (`aoi.geojson`). |
+| `results/` | **Çıktılar:** Üretilen haritalar, özet istatistikler ve diğer analiz sonuçları. |
+| `analysis.ipynb` | **Ana Çalışma Dosyası:** Proje sürecinin Jupyter Notebook üzerinden interaktif olarak yürütüldüğü dosya. |
 | `requirements.txt` | Proje için gerekli Python kütüphaneleri. |
 
 ## ⚙️ Kurulum
@@ -24,15 +27,15 @@ Proje, Google Earth Engine (GEE) API'sine erişim gerektirir.
 
 ### 1\. Ortamın Hazırlanması
 
-Proje bağımlılıklarını izole etmek için bir sanal ortam oluşturun ve gerekli kütüphaneleri kurun:
+Proje bağımlılıklarını izole etmek için bir sanal ortam oluşturun ve gerekli kütüphaneleri kurun (Jupyter dahil):
 
 ```bash
 # Sanal ortam oluşturma
 python -m venv .venv
 
 # Sanal ortamı etkinleştirme
-. .venv/bin/activate  # Linux/macOS
-# .venv\Scripts\activate  # Windows
+. .venv/bin/activate  # Linux/macOS
+# .venv\Scripts\activate  # Windows
 
 # Gerekli Python kütüphanelerini kurma
 pip install -r requirements.txt
@@ -46,38 +49,28 @@ GEE API'sine erişim için kimlik doğrulamanızı yapın:
 earthengine authenticate
 ```
 
-### 3\. Opsiyonel Ortam Değişkenleri (Servis Hesabı Kullanımı)
+## 🏃 Çalıştırma
 
-Kurumsal veya otomasyon amaçlı servis hesabı kullanacaksanız, gerekli ortam değişkenlerini ayarlayın:
+Proje, analiz adımlarını interaktif olarak takip etme imkanı sunan Jupyter Notebook veya otomasyon amaçlı Komut Satırı Arayüzü (CLI) ile çalıştırılabilir.
 
-| Değişken | Açıklama |
-| :--- | :--- |
-| `EE_SERVICE_ACCOUNT` | GEE Servis Hesabı E-posta Adresi. |
-| `EE_PRIVATE_KEY_FILE` | Servis hesabı özel anahtar dosyası yolu (`.json`). |
-| `EE_PROJECT` veya `EARTHENGINE_PROJECT` | GEE Cloud Proje Kimliği (zorunlu olabilir). |
+### 1\. Jupyter Notebook ile Çalıştırma (Önerilen)
 
-## 🔬 Analiz Hattı
+Tüm analiz süreci, görselleştirmelerle birlikte **`analysis.ipynb`** dosyasında adım adım yürütülmüştür. Notebook'u başlatmak için:
 
-`src/pipeline.py` içerisindeki ana fonksiyon `run_pipeline`, yangın sonrası etki analizi için aşağıdaki adımları sırasıyla yürütür:
+```bash
+# Sanal ortamı etkinleştirdiğinizden emin olun
+jupyter notebook analysis.ipynb
+```
 
-1.  **Başlatma:** GEE oturumunu başlatır ve Analiz Alanını (AOI) yükler.
-2.  **Görüntü Kompozitleri:** Yangın **öncesi** ve **sonrası** dönemler için bulut/gölge maskeleme (QA60) uygulanmış Sentinel-2 median kompozitleri üretir.
-3.  **İndeks Hesaplamaları:** Üretilen kompozitler üzerinden **NDVI** ve **NBR** haritalarını hesaplar.
-4.  **Değişim Hesaplamaları:** Yangın etkisini ölçmek için **dNDVI** ve **dNBR** (Normalized Burn Ratio Değişimi) haritalarını hesaplar.
-5.  **Şiddet Sınıflandırması:** dNBR değerlerine göre yangın şiddeti sınıflandırması yapar (standart 0 - 4 arası sınıflar).
-6.  **Çıktı Kaydı:** Üretilen haritaları (HTML formatında) ve **özet istatistikleri** (`results/summary_stats.csv`) kaydeder.
+### 2\. Komut Satırı Arayüzü (CLI) ile Çalıştırma (Alternatif)
 
-> ℹ️ **Detaylı Bilgi:** Bu süreç, `paper/main.tex` raporunun "Yöntem → Analiz Hattı (`pipeline.py`)" bölümünde detaylı olarak açıklanmıştır.
-
-## 🏃 Çalıştırma (Komut Satırı Arayüzü)
-
-Analiz, CLI üzerinden belirlenen tarihler ve AOI ile başlatılır. Aşağıdaki örnek, Karabük yangını varsayılan tarihlerini kullanır:
+Analizi doğrudan CLI üzerinden çalıştırmak için **(AOI yolu güncellenmiştir)**:
 
 ```bash
 python -m src.cli \
   --pre-start 2025-07-10 --pre-end 2025-07-25 \
   --post-start 2025-07-26 --post-end 2025-08-10 \
-  --aoi data/aoi.geojson \
+  --aoi src/aoi.geojson \
   --out results
 ```
 
@@ -85,7 +78,7 @@ python -m src.cli \
 | :--- | :--- |
 | `--pre-start`, `--pre-end` | Yangın öncesi dönemin başlangıç ve bitiş tarihleri (YYYY-MM-DD). |
 | `--post-start`, `--post-end` | Yangın sonrası dönemin başlangıç ve bitiş tarihleri (YYYY-MM-DD). |
-| `--aoi` | Analiz Alanı sınırlarını içeren GeoJSON dosyasının yolu. |
+| `--aoi` | Analiz Alanı sınırlarını içeren GeoJSON dosyasının yolu. (`src/aoi.geojson`) |
 | `--out` | Üretilen çıktıların (`.html` haritalar ve `.csv` istatistikler) kaydedileceği klasör. |
 
 ### Örnek Çıktılar
