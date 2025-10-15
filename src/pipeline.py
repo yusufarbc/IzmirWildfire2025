@@ -1,4 +1,14 @@
-from typing import Dict
+"""Uçtan uca analiz hattı (pipeline)
+
+Bu modül, tarih aralıkları ve AOI verildiğinde:
+1) Sentinel‑2 median kompozitleri hazırlar
+2) NDVI/NBR ve farkları (dNDVI/dNBR) hesaplar
+3) dNBR şiddet sınıflarını üretir
+4) Folium haritalarını HTML olarak kaydeder
+5) Özet istatistikleri CSV olarak yazar
+"""
+
+from typing import Dict, Optional
 import os
 
 import ee
@@ -18,8 +28,22 @@ def run_pipeline(
     post_end: str,
     aoi_geojson: str = "data/aoi.geojson",
     out_dir: str = "results",
+    project: Optional[str] = None,
 ) -> Dict[str, str]:
-    ee_init()
+    """Analizi çalıştırır ve çıktı dosya yollarını döndürür.
+
+    Args:
+        pre_start: Ön dönem başlangıç tarihi (YYYY-MM-DD)
+        pre_end: Ön dönem bitiş tarihi (YYYY-MM-DD)
+        post_start: Sonraki dönem başlangıç tarihi
+        post_end: Sonraki dönem bitiş tarihi
+        aoi_geojson: AOI GeoJSON yolu (yoksa varsayılan bbox kullanılır)
+        out_dir: Çıktı klasörü
+        project: (opsiyonel) GEE proje ID
+    Returns:
+        Üretilen haritalar ve CSV’nin dosya yolları.
+    """
+    ee_init(project)
     aoi = get_aoi(aoi_geojson)
 
     # Prepare median composites and indices
@@ -66,4 +90,3 @@ def run_pipeline(
     write_summary_csv(outputs["summary_csv"], summary)
 
     return outputs
-

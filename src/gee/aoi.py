@@ -1,15 +1,24 @@
+"""AOI (Area of Interest) yardımcıları.
+
+GeoJSON varsa dosyadan yükler; yoksa Karabük çevresi için varsayılan
+yaklaşık bir bbox döndürür.
+"""
+
 import ee
 from src.utils import load_aoi_geojson
 
 
 def get_aoi(geojson_path: str = "data/aoi.geojson") -> ee.Geometry:
-    """Return AOI geometry. If GeoJSON exists, use it; else fallback to Karabük bbox.
+    """AOI geometrisini döndürür.
 
-    Default bbox roughly covers Karabük and vicinity.
+    Args:
+        geojson_path: AOI GeoJSON dosya yolu
+    Returns:
+        ee.Geometry (GeoJSON yoksa varsayılan bbox)
     """
     geom = load_aoi_geojson(geojson_path)
     if geom is not None:
         return geom
-    # Fallback bbox: [minLon, minLat, maxLon, maxLat]
+    # Varsayılan bbox: [minLon, minLat, maxLon, maxLat]
     return ee.Geometry.Rectangle([32.3, 41.0, 33.0, 41.5])
 

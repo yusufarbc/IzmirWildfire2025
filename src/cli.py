@@ -1,9 +1,16 @@
+"""Komut satırı arabirimi (CLI)
+
+Bu modül, tarih aralıkları ve isteğe bağlı parametreleri alıp `run_pipeline`
+fonksiyonunu çalıştırır.
+"""
+
 import argparse
 
 from src.pipeline import run_pipeline
 
 
 def parse_args():
+    """Argümanları ayrıştırır ve döndürür."""
     p = argparse.ArgumentParser(
         description="KarabukWildfire2025 – Sentinel-2 NDVI/NBR dNDVI/dNBR analizi"
     )
@@ -17,6 +24,7 @@ def parse_args():
 
 
 def main():
+    """CLI giriş noktası."""
     args = parse_args()
     outs = run_pipeline(
         pre_start=args.pre_start,
@@ -33,4 +41,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
