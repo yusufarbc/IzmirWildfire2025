@@ -8,7 +8,7 @@ import ee
 from src.utils import load_aoi_geojson
 
 
-def get_aoi(geojson_path: str = "data/aoi.geojson") -> ee.Geometry:
+def get_aoi(geojson_path: str = "src/aoi.geojson") -> ee.Geometry:
     """AOI geometrisini döndürür.
 
     Args:
@@ -21,4 +21,3 @@ def get_aoi(geojson_path: str = "data/aoi.geojson") -> ee.Geometry:
         return geom
     # Varsayılan bbox: [minLon, minLat, maxLon, maxLat]
     return ee.Geometry.Rectangle([32.3, 41.0, 33.0, 41.5])
-
