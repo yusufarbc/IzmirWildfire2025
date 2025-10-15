@@ -1,21 +1,36 @@
-# Python
+# Byte-compiled / cache
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
 
 # Jupyter
 .ipynb_checkpoints/
 
-# Environments
-.venv/
-.venv311/
+# Envs
 .env
+.venv/
+venv/
 
-# Outputs
+# Results and generated artifacts
 results/
-# Optional local data (keep AOI in src/)
-data/
+
+# LaTeX build
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.lof
+paper/*.lot
+paper/*.bbl
+paper/*.blg
+paper/*.synctex.gz
+paper/*.pdf
+paper/*.fdb_latexmk
+paper/*.fls
+paper/main_show.txt
+
+# LaTeX temp at repo root
+texput.log
 
 # OS
-*.DS_Store
+.DS_Store
+Thumbs.db
