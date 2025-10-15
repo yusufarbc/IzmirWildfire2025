@@ -9,7 +9,6 @@ Sentinel-2 uydu görüntüleri kullanılarak 2025 Karabük yangınının etkiler
 | `src/` | **Analiz Kodları:** GEE tabanlı analiz hattı (`pipeline.py`), CLI arayüzü (`cli.py`), yardımcı fonksiyonlar ve görselleştirme araçları. |
 | `paper/` | **Çalışma Raporu:** Projenin metodolojisini, sonuçlarını ve değerlendirmesini içeren bilimsel rapor (LaTeX formatında). |
 | `results/` | **Çıktılar:** Üretilen haritalar, özet istatistikler ve diğer analiz sonuçları. **(**`*.gitignore`\*\* ile git takibinden çıkarılmıştır.)\*\* |
-| `data/` | **Girdiler:** Analiz Alanı (AOI) GeoJSON dosyası (`aoi.geojson`). |
 | `requirements.txt` | Proje için gerekli Python kütüphaneleri. |
 
 ## ⚙️ Kurulum
