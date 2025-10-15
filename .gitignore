@@ -17,7 +17,7 @@ results/*
 !results/*.png
 !results/*.csv
 # Uncomment if you also want HTML in Git, note: GitHub won’t render interactive JS
-#!results/*.html
+!results/*.html
 
 # LaTeX build
 paper/*.aux
