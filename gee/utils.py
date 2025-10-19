@@ -57,17 +57,46 @@ def ensure_dir(path: str) -> None:
 def load_aoi_geojson(path: str) -> Optional[ee.Geometry]:
     """GeoJSON dosyasından AOI'yi `ee.Geometry` olarak yükler.
 
-    Feature veya (Multi)Polygon geometri desteklenir.
-    Dosya bulunamazsa None döner.
+    Esnek destek:
+    - Feature: `geometry` alanı kullanılır
+    - FeatureCollection: union geometry
+    - Polygon/MultiPolygon (doğrudan geometri)
+    - Sadece `bbox`: dikdörtgen oluşturulur
+    Hata durumunda None döner (çağıran taraf varsayılan bbox kullanır).
     """
     if not path or not os.path.exists(path):
         return None
     with open(path, "r", encoding="utf-8") as f:
         gj = json.load(f)
-    # Works with Polygon/MultiPolygon or Feature(Geometry)
-    if isinstance(gj, dict) and gj.get("type") == "Feature":
-        geom = gj.get("geometry")
-    else:
-        geom = gj
-    return ee.Geometry(geom)
 
+    try:
+        if isinstance(gj, dict):
+            t = gj.get("type")
+            # Feature
+            if t == "Feature":
+                geom = gj.get("geometry")
+                if not geom and "bbox" in gj:
+                    bbox = gj["bbox"]
+                    return ee.Geometry.Rectangle(bbox)
+                return ee.Geometry(geom)
+            # FeatureCollection
+            if t == "FeatureCollection" or ("features" in gj and isinstance(gj["features"], list)):
+                fc = ee.FeatureCollection(gj)
+                return fc.geometry()
+            # Bare geometry
+            if t in {"Polygon", "MultiPolygon", "LineString", "MultiLineString", "Point", "MultiPoint"}:
+                return ee.Geometry(gj)
+            # Only bbox provided
+            if "bbox" in gj:
+                return ee.Geometry.Rectangle(gj["bbox"])
+        # Fallbacks: try as Geometry first, then as FeatureCollection geometry
+        try:
+            return ee.Geometry(gj)
+        except Exception:
+            try:
+                fc = ee.FeatureCollection(gj)
+                return fc.geometry()
+            except Exception:
+                return None
+    except Exception:
+        return None

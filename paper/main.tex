@@ -2,6 +2,8 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
 \usepackage[english, turkish]{babel}
 \usepackage{geometry}
 \geometry{margin=2cm}
@@ -9,6 +11,7 @@
 \usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage{hyperref}
+\PassOptionsToPackage{hyphens}{url}
 \hypersetup{
   colorlinks=true,
   linkcolor=black,
@@ -24,10 +27,11 @@
 \usepackage[section]{placeins} % Keep floats within their sections
 
 \title{IzmirWildfire2025: Sentinel-2 ile NDVI/NBR Tabanlı Yangın Etki Analizi}
-\author{Yusuf Talha ARABACI\\İzmir Üniversitesi\\Yüksek Lisans, Yazılım Mühendisliği Öğrencisi}
+\author{Yusuf Talha ARABACI\\Karabük Üniversitesi\\Yüksek Lisans, Yazılım Mühendisliği Öğrencisi}
 \date{Tarih: \today}
 
 \begin{document}
+\sloppy
 \maketitle
 \thispagestyle{empty}
 
@@ -136,11 +140,17 @@ Sınıflandırma eşikleri temsili olup AOI/saha koşullarına göre kalibre edi
   \item \textbf{İndeksler:} \texttt{with\_indices} NDVI (B8,B4) ve NBR (B8,B12) bantlarını her iki kompozite ekler.
   \item \textbf{Farklar:} \texttt{compute\_diffs} ile $\mathrm{dNDVI} = \mathrm{post.NDVI} - \mathrm{pre.NDVI}$ ve $\mathrm{dNBR} = \mathrm{pre.NBR} - \mathrm{post.NBR}$ görüntüleri hesaplanır.
   \item \textbf{Şiddet:} \texttt{classify\_dnbr} dNBR için 0–4 arası şiddet sınıflarını (eşik temelli) üretir.
-  \item \textbf{Haritalar:} \texttt{save\_folium} ile şu HTML haritaları kaydedilir: \texttt{pre\_RGB.html}, \texttt{post\_RGB.html}, \texttt{pre\_NDVI.html}, \texttt{post\_NDVI.html}, \texttt{pre\_NBR.html}, \texttt{post\_NBR.html}, \texttt{dNDVI.html}, \texttt{dNBR.html}, \texttt{severity.html}.
+  \item \textbf{Haritalar:} \texttt{save\_folium} ile şu HTML haritaları kaydedilir:
+  \begin{itemize}
+    \item \texttt{pre\_RGB.html}, \texttt{post\_RGB.html}
+    \item \texttt{pre\_NDVI.html}, \texttt{post\_NDVI.html}
+    \item \texttt{pre\_NBR.html}, \texttt{post\_NBR.html}
+    \item \texttt{dNDVI.html}, \texttt{dNBR.html}, \texttt{severity.html}
+  \end{itemize}
   \item \textbf{Özet istatistik:} \texttt{reduce\_mean} ile AOI üzerinde öncesi/sonrası NDVI ortalamaları ve dNDVI/dNBR ortalamaları hesaplanır; \texttt{write\_summary\_csv} ile \texttt{results/summary\_stats.csv} dosyasına yazılır.
 \end{itemize}
 
-Bu çalışmada pipeline, öncesi için \texttt{2025-08-15--2025-08-31}, sonrası için \texttt{2025-09-01--2025-09-20} tarih aralıklarıyla çalıştırılmıştır. Üretilen \texttt{results/summary\_stats.csv} dosyasındaki değerler rapordaki özet istatistik tablosu ve yorumlarda kullanılmıştır.
+Bu çalışmada pipeline, öncesi için \texttt{2025-06-01--2025-06-10}, sonrası için \texttt{2025-09-01--2025-09-10} tarih aralıklarıyla çalıştırılmıştır. Üretilen \texttt{results/summary\_stats.csv} dosyasındaki değerler rapordaki özet istatistik tablosu ve yorumlarda kullanılmıştır.
 
 \noindent\textbf{Kod Modülleri (src/):} Pipeline adımlarını destekleyen başlıca modüller aşağıdadır.
 \begin{itemize}
@@ -191,7 +201,7 @@ hektar cinsinden $A_k/10^4$ ile verilir.
 \begin{itemize}
   \item AOI genelinde yangın etkisi \emph{çoğunlukla çok düşük/düşük} düzeydedir (\(\overline{\mathrm{dNBR}} \approx 0.074\)).
   \item NDVI \(\approx0.584\)'ten \(\approx0.511\)'e düşmüştür (mutlak \(\approx0.073\), bağıl \(\approx12.5\%\)).
-  \item Etki mekânsal olarak heterojendir; daha yüksek şiddetli cepler mevcuttur ve şiddet haritaları (\ref{fig:diffs}) ile doğrulanmalıdır.
+  \\\\item Etki mekansal olarak heterojendir; daha yuksek siddetli cepler mevcuttur ve siddet haritalari ile dogrulanmalidir.
   \item Toplam yanmış alan: \num{17061.94}\,ha (AOI'nin \(\approx\) \num{17.12}\%\'si; \texttt{burned\_area\_ha}, \texttt{aoi\_area\_ha}).
 \end{itemize}
 \subsection{Haritalar}
@@ -207,7 +217,25 @@ hektar cinsinden $A_k/10^4$ ile verilir.
     \resizebox{\linewidth}{!}{\includegraphics{../results/post_RGB.png}}
     \caption{Sonrası RGB (B4,B3,B2)}
   \end{subfigure}
-  \caption{Doğal renk (RGB) karşılaştırması.}
+  \\caption{Doğal renk (RGB) karşılaştırması.}
+  \\label{fig:rgb}
+\end{figure}
+\FloatBarrier
+
+% NBR pre/post comparison
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \resizebox{\linewidth}{!}{\includegraphics{../results/pre_NBR.png}}
+    \caption{Pre NBR}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.48\textwidth}
+    \centering
+    \resizebox{\linewidth}{!}{\includegraphics{../results/post_NBR.png}}
+    \caption{Post NBR}
+  \end{subfigure}
+  \caption{NBR comparison.}
 \end{figure}
 \FloatBarrier
 
@@ -223,7 +251,8 @@ hektar cinsinden $A_k/10^4$ ile verilir.
     \resizebox{\linewidth}{!}{\includegraphics{../results/post_NDVI.png}}
     \caption{Sonrası NDVI}
   \end{subfigure}
-  \caption{NDVI karşılaştırması.}
+  \\caption{NDVI karşılaştırması.}
+  \\label{fig:ndvi}
 \end{figure}
 \FloatBarrier
 
@@ -239,22 +268,18 @@ hektar cinsinden $A_k/10^4$ ile verilir.
     \resizebox{\linewidth}{!}{\includegraphics{../results/severity.png}}
     \caption{dNBR Şiddeti (0--4)}
   \end{subfigure}
-  \caption{Fark analizi ve şiddet sınıfları.}
+  \\caption{Fark analizi ve şiddet sınıfları.}
+  \\label{fig:diffs}
 \end{figure}
 
-\subsection{Özet İstatistikler}
-\begin{table}[h]
-  \centering
-  \begin{tabular}{@{}ll@{}}\toprule
-  Metrik & Değer \\\midrule
-  Öncesi Ortalama NDVI & 0.584 \\
-  Sonrası Ortalama NDVI & 0.511 \\
-  Ortalama dNDVI & $-0.073$ \\
-  Ortalama dNBR & 0.074 \\\bottomrule
-  \end{tabular}
-  \caption{AOI genelinde özet istatistikler. Değerler \texttt{../results/summary\_stats.csv} dosyasından alınmıştır.}
-\end{table}
-
+\subsection{\u00D6zet \u0130statistikler}
+\noindent Ortalama de\u011ferler:
+\\begin{itemize}
+  \\item \textbf{\u00D6ncesi NDVI ort.}: 0.365
+  \\item \textbf{Sonras\u0131 NDVI ort.}: 0.344
+  \\item \textbf{dNDVI ort.}: $-0.020$
+  \\item \textbf{dNBR ort.}: -0.038
+\\end{itemize}
 Bu bölümde sunulan özet, yangın öncesi ve sonrası bitki örtüsü durumunu (NDVI) ve yangın etkisini (dNBR) nicel olarak ifade eder. NDVI 0 ile 1 arasında değer alır; daha yüksek değerler daha yoğun ve sağlıklı bitki örtüsünü gösterir. dNDVI iki tarih arasındaki NDVI farkıdır; negatif değerler yeşil örtüde azalmayı ifade eder. dNBR ise yanma şiddetine duyarlı bir fark ölçütüdür; yaklaşık 0.10--0.27 aralığı düşük, 0.27--0.44 aralığı orta, 0.44 ve üzeri daha yüksek şiddet seviyelerine karşılık gelir. Tablodaki ortalamalar, AOI genelinde NDVI’da \(\sim0.073\) birimlik düşüş (yaklaşık 0.584'ten 0.511'e; \(dNDVI<0\), bağıl \(\sim12.5\%\)) ve \(dNBR \approx 0.074\) ile çoğunlukla çok düşük/düşük şiddet sinyaline işaret etmektedir. Ancak bu değerler mekânsal farklılıkları düzler; yer yer daha yüksek şiddetli cepler bulunabilir. Bu nedenle yorum, şiddet haritaları ve sınıf dağılımı ile birlikte değerlendirilmelidir.
 
 Etkilenen alan büyüklükleri, sınıf piksel sayıları ve/veya eşiklerin literatürle
@@ -280,6 +305,15 @@ dosyasında \texttt{vis\_params()} fonksiyonunda tanımlıdır.
 
 
 \end{document}
+
+
+
+
+
+
+
+
+
 
 
 
