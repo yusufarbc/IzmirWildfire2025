@@ -1,6 +1,6 @@
 """AOI (Area of Interest) yardımcıları.
 
-GeoJSON varsa dosyadan yükler; yoksa Karabük çevresi için varsayılan
+GeoJSON varsa dosyadan yükler; yoksa İzmir çevresi için varsayılan
 yaklaşık bir bbox döndürür.
 """
 
@@ -20,4 +20,6 @@ def get_aoi(geojson_path: str = "src/aoi.geojson") -> ee.Geometry:
     if geom is not None:
         return geom
     # Varsayılan bbox: [minLon, minLat, maxLon, maxLat]
-    return ee.Geometry.Rectangle([32.3, 41.0, 33.0, 41.5])
+    return ee.Geometry.Rectangle([26.0, 38.0, 27.6, 39.4])
+
+

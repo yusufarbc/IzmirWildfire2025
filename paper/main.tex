@@ -14,7 +14,7 @@
   linkcolor=black,
   citecolor=black,
   urlcolor=blue,
-  pdftitle={KarabukWildfire2025: Sentinel-2 ile NDVI/NBR Tabanlı Yangın Etki Analizi},
+  pdftitle={IzmirWildfire2025: Sentinel-2 ile NDVI/NBR Tabanlı Yangın Etki Analizi},
   pdfauthor={Yusuf Talha ARABACI}
 }
 \usepackage{caption}
@@ -23,8 +23,8 @@
 \usepackage{float} % For [H] placement
 \usepackage[section]{placeins} % Keep floats within their sections
 
-\title{KarabukWildfire2025: Sentinel-2 ile NDVI/NBR Tabanlı Yangın Etki Analizi}
-\author{Yusuf Talha ARABACI\\Karabük Üniversitesi\\Yüksek Lisans, Yazılım Mühendisliği Öğrencisi}
+\title{IzmirWildfire2025: Sentinel-2 ile NDVI/NBR Tabanlı Yangın Etki Analizi}
+\author{Yusuf Talha ARABACI\\İzmir Üniversitesi\\Yüksek Lisans, Yazılım Mühendisliği Öğrencisi}
 \date{Tarih: \today}
 
 \begin{document}
@@ -39,7 +39,7 @@
 \selectlanguage{turkish}
 \renewcommand{\abstractname}{Özet}
 \begin{abstract}
-Bu çalışma, 2025 Karabük orman yangınının etkilerini Sentinel-2 L2A verileri kullanılarak
+Bu çalışma, 2025 İzmir orman yangınının etkilerini Sentinel-2 L2A verileri kullanılarak
 NDVI ve NBR indeksleri üzerinden incelemektedir. Yangın öncesi ve sonrası dönemler için
 bulut maskeleme ve median kompozit uygulandıktan sonra NDVI/NBR bantları hesaplanmış,
 fark indeksleri (dNDVI, dNBR) türetilmiş ve dNBR eşiklerine dayalı bir şiddet sınıflandırması
@@ -48,12 +48,12 @@ eşliğinde sunulmaktadır. Yaklaşım, uzaktan algılama temelli hızlı durum 
 afet sonrası planlama süreçlerine katkı sağlamayı amaçlamaktadır.
 \end{abstract}
 
-\noindent\textbf{Anahtar Kelimeler:} Sentinel-2, NDVI, NBR, dNBR, yangın şiddeti, uzaktan algılama, Karabük.
+\noindent\textbf{Anahtar Kelimeler:} Sentinel-2, NDVI, NBR, dNBR, yangın şiddeti, uzaktan algılama, İzmir.
 
 \clearpage
 
 \section{Giriş}
-2025 Karabük orman yangınlarının ekosistem, toprak ve yerleşimler üzerindeki etkilerinin
+2025 İzmir orman yangınlarının ekosistem, toprak ve yerleşimler üzerindeki etkilerinin
 nicel ve mekânsal olarak ortaya konması; yangın sonrası rehabilitasyon, yeniden
 ormanlaştırma ve risk azaltma planlamaları açısından kritik öneme sahiptir. Uzaktan
 algılama, yüksek zamansal ve mekânsal çözünürlükte tekrarlanan gözlemleri mümkün kılarak
@@ -64,7 +64,7 @@ sunmaktadır; fark indeksleri (dNDVI, dNBR) ve eşik tabanlı şiddet sınıflan
 etki alanı haritaları üretilmektedir.
 
 \section{Çalışma Alanı (AOI)}
-Çalışma alanı, Karabük ili Ovacık--Eskipazar çevresi ve doğuda Çankırı sınırına
+Çalışma alanı, İzmir ili Ovacık--Eskipazar çevresi ve doğuda Çankırı sınırına
 komşu bir bölgeyi kapsamaktadır. AOI, depo kökünde yer alan \texttt{src/aoi.geojson}
 dosyasında çokgen (Polygon) olarak tanımlanmıştır. Bu AOI, yangınla doğrudan ilişkili
 alanları kapsayacak şekilde iteratif olarak daraltılmış ve sonuç analizlerinde esas
@@ -140,7 +140,7 @@ Sınıflandırma eşikleri temsili olup AOI/saha koşullarına göre kalibre edi
   \item \textbf{Özet istatistik:} \texttt{reduce\_mean} ile AOI üzerinde öncesi/sonrası NDVI ortalamaları ve dNDVI/dNBR ortalamaları hesaplanır; \texttt{write\_summary\_csv} ile \texttt{results/summary\_stats.csv} dosyasına yazılır.
 \end{itemize}
 
-Bu çalışmada pipeline, öncesi için \texttt{2025-07-10--2025-07-25}, sonrası için \texttt{2025-07-26--2025-08-10} tarih aralıklarıyla çalıştırılmıştır. Üretilen \texttt{results/summary\_stats.csv} dosyasındaki değerler rapordaki özet istatistik tablosu ve yorumlarda kullanılmıştır.
+Bu çalışmada pipeline, öncesi için \texttt{2025-08-15--2025-08-31}, sonrası için \texttt{2025-09-01--2025-09-20} tarih aralıklarıyla çalıştırılmıştır. Üretilen \texttt{results/summary\_stats.csv} dosyasındaki değerler rapordaki özet istatistik tablosu ve yorumlarda kullanılmıştır.
 
 \noindent\textbf{Kod Modülleri (src/):} Pipeline adımlarını destekleyen başlıca modüller aşağıdadır.
 \begin{itemize}
@@ -149,7 +149,7 @@ Bu çalışmada pipeline, öncesi için \texttt{2025-07-10--2025-07-25}, sonras�
   \item \textbf{\texttt{src/gee/change.py}}: \texttt{compute\_diffs} (dNDVI/dNBR) ve \texttt{classify\_dnbr} (0--4 sınıflar).
   \item \textbf{\texttt{src/visualize.py}}: \texttt{vis\_params}, \texttt{save\_folium}, \texttt{reduce\_mean}, \texttt{write\_summary\_csv}, PNG dışa aktarımlar.
   \item \textbf{\texttt{src/utils.py}}: \texttt{ee\_init}, \texttt{ensure\_dir}, \texttt{load\_aoi\_geojson}.
-  \item \textbf{\texttt{src/gee/aoi.py}}: AOI'nin GeoJSON'dan veya varsayılan Karabük bbox'ından elde edilmesi.
+  \item \textbf{\texttt{src/gee/aoi.py}}: AOI'nin GeoJSON'dan veya varsayılan İzmir bbox'ından elde edilmesi.
   \item \textbf{\texttt{src/cli.py}}: Komut satırı arabirimi; \texttt{run\_pipeline} çağrısı.
 \end{itemize}
 
@@ -280,4 +280,6 @@ dosyasında \texttt{vis\_params()} fonksiyonunda tanımlıdır.
 
 
 \end{document}
+
+
 

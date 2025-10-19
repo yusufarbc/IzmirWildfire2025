@@ -1,0 +1,23 @@
+\babel@toc {turkish}{}\relax 
+\babel@toc {turkish}{}\relax 
+\contentsline {section}{\numberline {1}Giriş}{4}{section.1}%
+\contentsline {section}{\numberline {2}Çalışma Alanı (AOI)}{4}{section.2}%
+\contentsline {section}{\numberline {3}Proje Amacı}{4}{section.3}%
+\contentsline {section}{\numberline {4}Veri Kaynakları}{4}{section.4}%
+\contentsline {section}{\numberline {5}Görüntü İşleme Teknikleri}{4}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Ön İşleme ve Kompozit Üretimi}{4}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}İndeks Türetimi (NDVI, NBR)}{5}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Fark İndeksleri ve İşaret Sözleşmeleri}{5}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Yanıklık Şiddeti ve Eşikleme}{5}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}İndeks Seçimi ve Sınırlılıklar}{5}{subsection.5.5}%
+\contentsline {section}{\numberline {6}Yöntem}{6}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Analiz Hattı ve Uygulama Altyapısı}{6}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Parametre Seçimleri ve Uygulama Ayrıntıları}{7}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Yanıklık Şiddeti Sınıflandırması}{7}{subsection.6.3}%
+\contentsline {section}{\numberline {7}Sonuçlar}{7}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Bulguların Özeti}{7}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Haritalar}{8}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Özet İstatistikler}{9}{subsection.7.3}%
+\contentsline {section}{\numberline {8}Sınırlılıklar ve Belirsizlikler}{9}{section.8}%
+\contentsline {section}{\numberline {9}Tartışma ve Gelecek Çalışmalar}{9}{section.9}%
+\contentsline {section}{\numberline {10}Görselleştirme}{9}{section.10}%

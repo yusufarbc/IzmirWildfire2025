@@ -40,7 +40,15 @@ def ee_init(project: Optional[str] = None) -> None:
     """
     sa = os.getenv("EE_SERVICE_ACCOUNT")
     key_file = os.getenv("EE_PRIVATE_KEY_FILE")
+    print(f"[ee_init] requested project arg: {project!r}")
+    # Project must be a string Project ID (name), not a numeric project number.
+    if project is not None:
+        if not isinstance(project, str):
+            raise ValueError("ee_init: 'project' must be a string Project ID (e.g., 'karabukwildfire2025'), not a numeric project number.")
+        if project.isdigit():
+            raise ValueError("ee_init: received a numeric-looking value. Pass the Project ID (e.g., 'karabukwildfire2025'), not the project number.")
     project_id = _resolve_project(project)
+    print(f"[ee_init] resolved project_id: {project_id!r}")
 
     def _init_with(creds=None):
         if project_id:
@@ -51,12 +59,14 @@ def ee_init(project: Optional[str] = None) -> None:
 
     try:
         if sa and key_file and os.path.exists(key_file):
+            print("[ee_init] using service account credentials")
             credentials = ee.ServiceAccountCredentials(sa, key_file)
             _init_with(credentials)
         else:
             try:
                 _init_with()
             except Exception:
+                print("[ee_init] user OAuth required; calling ee.Authenticate()")
                 ee.Authenticate()
                 _init_with()
     except Exception as e:

@@ -1,4 +1,4 @@
-"""KarabukWildfire2025 - src paketi
+"""IzmirWildfire2025 - src paketi
 
 Bu paket, Google Earth Engine (GEE) üzerinde Sentinel‑2 verileriyle
 yangın öncesi/sonrası analiz akışını sağlar.
@@ -10,4 +10,5 @@ Alt modüller:
 - cli: Komut satırı arabirimi (pipeline’ı çağırır)
 - utils: GEE başlangıcı ve genel yardımcılar
 """
+
 

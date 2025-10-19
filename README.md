@@ -1,13 +1,13 @@
-# KarabukWildfire2025: Orman Yangını Etkisi Analizi
+# izmirwildfire2025: Orman Yangını Etkisi Analizi
 
-Sentinel-2 uydu görüntüleri kullanılarak 2025 Karabük yangınının etkilerini (yanma şiddeti, hasar) değerlendirmeye yönelik Google Earth Engine (GEE) tabanlı analiz projesi. Normalized Difference Vegetation Index (NDVI), Normalized Burn Ratio (NBR) ve bu indekslerin değişimleri (dNDVI, dNBR) hesaplanmıştır.
+Sentinel-2 uydu görüntüleri kullanılarak 2025 İzmir yangınının etkilerini (yanma şiddeti, hasar) değerlendirmeye yönelik Google Earth Engine (GEE) tabanlı analiz projesi. Normalized Difference Vegetation Index (NDVI), Normalized Burn Ratio (NBR) ve bu indekslerin değişimleri (dNDVI, dNBR) hesaplanmıştır.
 
 ## 🔗 Canlı Demo ve Sonuçlar
 
 Analiz çıktılarına ve interaktif haritalara aşağıdaki linkten ulaşabilirsiniz:
 
-➡️ **[PROJE SONUÇLARI (GITHUB PAGES)](https://yusufarbc.github.io/KarabukWildfire2025/)**
-➡️ **[ANA GİTHUB DEPOSU](https://github.com/yusufarbc/KarabukWildfire2025)**
+➡️ **[PROJE SONUÇLARI (GITHUB PAGES)](https://yusufarbc.github.io/izmirwildfire2025/)**
+➡️ **[ANA GİTHUB DEPOSU](https://github.com/yusufarbc/izmirwildfire2025)**
 
 -----
 
@@ -68,8 +68,8 @@ Analizi doğrudan CLI üzerinden çalıştırmak için **(AOI yolu güncellenmi�
 
 ```bash
 python -m src.cli \
-  --pre-start 2025-07-10 --pre-end 2025-07-25 \
-  --post-start 2025-07-26 --post-end 2025-08-10 \
+  --pre-start 2025-08-15 --pre-end 2025-08-31 \
+  --post-start 2025-09-01 --post-end 2025-09-20 \
   --aoi src/aoi.geojson \
   --out results
 ```
@@ -88,3 +88,6 @@ Başarılı bir çalıştırmanın ardından `results/` klasöründe HTML harita
 ## 📝 Lisans
 
 Bu proje [Lisans Türü - Örn: MIT] lisansı altındadır. Detaylar için `LICENSE` dosyasına bakınız.
+
+
+

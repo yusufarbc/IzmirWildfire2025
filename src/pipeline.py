@@ -33,7 +33,7 @@ def run_pipeline(
     pre_end: str,
     post_start: str,
     post_end: str,
-    aoi_geojson: str = "data/aoi.geojson",
+    aoi_geojson: str = "src/aoi.geojson",
     out_dir: str = "results",
     project: Optional[str] = None,
     area_scale: int = 10,
@@ -112,3 +112,4 @@ def run_pipeline(
     write_kv_csv(outputs["severity_areas_csv"], areas)
 
     return outputs
+

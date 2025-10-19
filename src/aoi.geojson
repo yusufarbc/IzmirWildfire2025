@@ -1,12 +1,26 @@
 {
-  "type": "Polygon",
-  "coordinates": [
-    [
-      [32.640000, 40.949000],
-      [33.020000, 40.949000],
-      [33.020000, 41.230000],
-      [32.640000, 41.230000],
-      [32.640000, 40.949000]
-    ]
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Izmir Wildfire 2025 AOI (approx)",
+        "source": "placeholder"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [26.70, 38.45],
+            [26.70, 38.95],
+            [27.20, 39.05],
+            [27.45, 38.80],
+            [27.30, 38.50],
+            [26.95, 38.40],
+            [26.70, 38.45]
+          ]
+        ]
+      }
+    }
   ]
 }

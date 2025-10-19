@@ -1,42 +1,142 @@
-# Byte-compiled / cache
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.lnk
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+.yarn/cache/
+.yarn/install-state.gz
+.yarn/unplugged/
+.yarn/build-state.yml
+.npm/
+
+# Python
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+pip-wheel-metadata/
+.tox/
+.nox/
+.pytest_cache/
+coverage.xml
+.coverage*
+htmlcov/
+*.cover
+*.py,cover
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+
+# Virtualenvs
+.python-version
+Pipfile.lock
+poetry.lock
 
 # Jupyter
 .ipynb_checkpoints/
 
-# Envs
+# Logs
+logs/
+*.log
+
+# IDEs / Editors
+.idea/
+.vscode/
+.history/
+*.code-workspace
+
+# VS Code local settings except recommended extensions
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.sample.json
+
+# Mac package files
+*.pkg
+*.dmg
+
+# Images/Artifacts
+*.tmp
+*.swp
+*.swo
+~$*
+
+# Dotenv
 .env
-.venv/
-venv/
+.env.*
+!*.env.example
 
-# Results and generated artifacts
-# Results and generated artifacts
-# Track only selected file types from results (PNG, CSV, small HTML if needed)
-results/*
-!results/*.png
-!results/*.csv
-# Uncomment if you also want HTML in Git, note: GitHub won’t render interactive JS
-!results/*.html
+# Django/Flask
+*.sqlite3
+db.sqlite3
+instance/
+media/
 
-# LaTeX build
-paper/*.aux
-paper/*.log
-paper/*.out
-paper/*.toc
-paper/*.lof
-paper/*.lot
-paper/*.bbl
-paper/*.blg
-paper/*.synctex.gz
-paper/*.pdf
-paper/*.fdb_latexmk
-paper/*.fls
-paper/main_show.txt
+# React/Next/Nuxt build
+.next/
+.nuxt/
+.cache/
+.parcel-cache/
+out/
+coverage/
 
-# LaTeX temp at repo root
-texput.log
+# Svelte/Vite
+.svelte-kit/
+vite.svg
 
-# OS
-.DS_Store
-Thumbs.db
+# Java
+target/
+*.class
+.gradle/
+build/
+
+# Rust
+target/
+
+# Go
+bin/
+pkg/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Docker
+**/.dockerignore
+**/Dockerfile.local
+.docker/
+
+# Misc
+tmp/
+.cache/
+.local/
+
