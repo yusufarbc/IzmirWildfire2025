@@ -65,7 +65,7 @@ ee_init()  # gerekirse ee_init(project="<GCP_PROJECT_ID>")
 
 outputs = run_pipeline(
     pre_start="2025-06-01", pre_end="2025-06-10",
-    post_start="2025-09-01", post_end="2025-09-10",
+    post_start="2025-08-20", post_end="2025-08-30",  # Sonrası için 20–30 Ağustos
     aoi_geojson="gee/aoi.geojson",
     out_dir="results",
 )
@@ -74,6 +74,8 @@ print(outputs)
 ```
 
 Başarılı çalıştırma sonrası `results/` klasöründe interaktif haritalar (HTML) ve statik görseller (PNG) oluşur. Hızlı göz atmak için depo kökündeki `index.html` sayfasını açın.
+
+Not: Bu çalışmada sonrası (post) dönem için 20–30 Ağustos aralığı baz alınmıştır. Farklı sahne/meteorolojik koşullarda bu aralığı yakın tarihlerle değiştirerek tekrar üretim yapabilirsiniz.
 
 ## Rapor (LaTeX)
 
@@ -89,4 +91,3 @@ Türkçe karakterler ve yer imleri için dosyada `babel` Türkçe ana dil ve `hy
 ## Lisans
 
 Bu proje MIT lisansı altındadır. Ayrıntılar için `LICENSE` dosyasına bakınız.
-
