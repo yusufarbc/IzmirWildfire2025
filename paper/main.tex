@@ -43,6 +43,7 @@ Bu çalışma, 2025 İzmir orman yangınının etkilerini Sentinel-2 L2A veriler
 
 \noindent\textbf{Anahtar Kelimeler:} Sentinel-2, NDVI, NBR, dNBR, yanıklık şiddeti, uzaktan algılama, İzmir.
 
+\clearpage
 \tableofcontents
 \clearpage
 
@@ -72,6 +73,20 @@ dNBR için 0--4 arası sınıflar USGS-benzeri eşiklerle (\(t_0=0.10, t_1=0.27,
 \subsection{Uygulama ve Depo Yapısı}
 Kodlar \texttt{gee/} altında düzenlenmiştir: \texttt{pipeline.py} (uçtan uca akış), \texttt{preprocess.py} (maskeleme/kompozit), \texttt{indices.py} (NDVI/NBR/NDWI/MNDWI), \texttt{change.py} (dNDVI/dNBR, sınıflandırma), \texttt{visualize.py} (harita/PNG/istatistik). Çıktılar \texttt{results/} klasöründe HTML/PNG/CSV olarak üretilmiştir. Web sunumu için depo kökündeki \texttt{index.html} kullanılmaktadır.
 
+\subsection{Yöntemsel İyileştirmeler ve Parametreler}
+Yalancı pozitifleri azaltmak ve sahanın heterojenliğini daha iyi yakalamak için şu ayarlar uygulanmıştır:
+\begin{itemize}
+  \item \textbf{Kıyı tamponu:} Su maskesi çevresinde \SI{100}{m} tampon ile kıyı-karışım pikselleri dışlanmıştır.
+  \item \textbf{Yanıcı yüzey filtresi:} \(\mathrm{NDVI}_{\text{pre}}>0.25\) ile yanıcı olmayan yüzeyler elenmiştir.
+  \item \textbf{Eşik parametrizasyonu:} dNBR eşikleri \((t_0,t_1,t_2,t_3)\) AOI'ye göre ayarlanabilir kılınmıştır.
+  \item \textbf{Dönem seçimi:} Sonrası için 20--30 Ağustos aralığı tercih edilmiştir.
+\end{itemize}
+
+\subsection{Doğrulama ve Geçerlilik}
+RGB karşılaştırması (\autoref{fig:rgb}), dNBR ve şiddet haritaları (\autoref{fig:diffs}) gözlemleri ile sayısal özetlerin tutarlılığı kontrol edilmiştir. Bir sonraki çalışmada saha gözlemleri ve bağımsız BA ürünleri ile nicel doğrulama planlanmaktadır.
+
+\subsection{Tekrarlanabilirlik}
+Bütün çıktılar \texttt{results/} altında yer alır; \texttt{index.html} üzerinden haritalar ve veriler (CSV/PNG) görüntülenebilir.
 \section{Sonuçlar}
 \subsection{Özet İstatistikler}
 Aşağıdaki tablo, bu çalışmada hesaplanan özet ölçütleri (3 ondalık) göstermektedir.
