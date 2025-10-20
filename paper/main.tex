@@ -65,14 +65,14 @@ Yangınların ekosistem, toprak ve yerleşimler üzerindeki etkilerinin nicel ve
 \\subsection{NDVI ve NBR: Tanım, Yorum ve Farklar}
 NDVI $=(\mathrm{NIR}-\mathrm{Red})/(\mathrm{NIR}+\mathrm{Red})$, NBR $=(\mathrm{NIR}-\mathrm{SWIR2})/(\mathrm{NIR}+\mathrm{SWIR2})$ olarak tanımlanmıştır. Fark endeksleri \(\mathrm{dNDVI}=\mathrm{post}-\mathrm{pre}\), \(\mathrm{dNBR}=\mathrm{pre}-\mathrm{post}\) biçiminde hesaplanmıştır. Bu tanıma göre vejetasyon kaybı dNDVI$<0$, yanıklık artışı dNBR$>0$ ile ifade edilir.
 
-\subsection{Sade Açıklamalar}
-\paragraph{NDVI nedir?}
+\subsection{Kavramsal Temeller}
+\subsubsection{NDVI}
 Yakın kızılötesi (NIR) ile kırmızı bant arasındaki farkın toplamına oranıdır:\,\(\mathrm{NDVI}=(\mathrm{NIR}-\mathrm{Red})/(\mathrm{NIR}+\mathrm{Red})\). Sağlıklı bitki örtüsü NIR'de yüksek, kırmızıda düşük yansıtır; bu nedenle NDVI büyüdükçe yeşillik/yoğunluk artar (0.2--0.5 orta, >0.5 yoğun).
 
-\paragraph{NBR nedir?}
+\subsubsection{NBR}
 NIR ile SWIR2 arasındaki farkın toplamına oranıdır:\,\(\mathrm{NBR}=(\mathrm{NIR}-\mathrm{SWIR2})/(\mathrm{NIR}+\mathrm{SWIR2})\). Yanık yüzeylerde NIR azalır, SWIR artar; yangın öncesi NBR genellikle daha yüksek, yangın sonrası daha düşüktür.
 
-\paragraph{Fark endeksleri neyi gösterir?}
+\subsubsection{Fark Endeksleri}
 \begin{itemize}
   \item \(\mathrm{dNDVI}=\mathrm{post}-\mathrm{pre}\): Negatif ise yeşil örtü kaybı vardır.
   \item \(\mathrm{dNBR}=\mathrm{pre}-\mathrm{post}\): Pozitif ise yanıklık artışı vardır.
@@ -85,8 +85,8 @@ dNBR için 0--4 arası sınıflar USGS-benzeri eşiklerle (\(t_0=0.10, t_1=0.27,
 \subsection{Uygulama ve Depo Yapısı}
 Kodlar \texttt{gee/} altında düzenlenmiştir: \texttt{pipeline.py} (uçtan uca akış), \texttt{preprocess.py} (maskeleme/kompozit), \texttt{indices.py} (NDVI/NBR/NDWI/MNDWI), \texttt{change.py} (dNDVI/dNBR, sınıflandırma), \texttt{visualize.py} (harita/PNG/istatistik). Çıktılar \texttt{results/} klasöründe HTML/PNG/CSV olarak üretilmiştir. Web sunumu için depo kökündeki \texttt{index.html} kullanılmaktadır.
 
-\subsection{Neden Bu Seçimleri Yaptık?}
-Bu seçimler, yalancı sinyalleri azaltıp yorumlanabilirliği artırmak içindir:
+\subsection{Yöntem Seçimlerinin Gerekçesi}
+ Bu seçimler, yalancı sinyalleri azaltıp yorumlanabilirliği artırmak içindir:
 \begin{itemize}
   \item \textbf{Sentinel-2 ve median kompozit:} 10--20 m çözünürlük ve sık tekrar sayesinde önce/sonra karşılaştırmaları güvenilir; median tekil bulut/duman artıklarını bastırır.
   \item \textbf{Maskeleme:} QA60 (bulut/sirrus) + SCL su sınıfı ve NDWI/MNDWI ile su/deniz alanları dışlandı; kıyı şeridi için \SI{100}{m} tampon eklendi.
@@ -139,7 +139,7 @@ Aşağıdaki tablo, bu çalışmada hesaplanan özet ölçütleri (3 ondalık) g
   \label{tab:areas}
 \end{table}
 
-\subsection*{Bulgu Özeti}
+\subsection*{Bulguların Özeti}
 \begin{center}
 \fbox{\begin{minipage}{0.95\textwidth}
 AOI genelinde \textit{NDVI (Önce)} = \num{0.451}, \textit{NDVI (Sonra)} = \num{0.431} olup, \(\mathrm{dNDVI} = -\num{0.022}\) olarak hesaplanmıştır. dNBR ortalaması \num{0.003} düzeyindedir. dNBR şiddet sınıflarına göre toplam yanmış alan yaklaşık \num{45448.49}\,ha olup, yüksek/orta–yüksek sınıflar sınırlıdır; etki çoğunlukla düşük şiddet düzeyindedir.
