@@ -50,13 +50,13 @@ Bu çalışma, 2025 İzmir orman yangınının etkilerini Sentinel-2 L2A veriler
 \section*{Yönetici Özeti}
 \begin{center}
 \fbox{\begin{minipage}{0.96\textwidth}
-\textbf{Amaç} — İzmir 2025 yangınının etkisini Sentinel‑2 verisiyle nicel ve mekânsal olarak ortaya koymak; yeşil örtü kaybı (dNDVI) ve yanıklık şiddetini (dNBR) haritalamak.
+\textbf{Amaç} --- İzmir 2025 yangınının etkisini Sentinel‑2 verisiyle nicel ve mekânsal olarak ortaya koymak; yeşil örtü kaybı (dNDVI) ve yanıklık şiddetini (dNBR) haritalamak.
 
-\textbf{Yöntem} — Önce (1–10 Haziran) ve sonra (20–30 Ağustos) dönemleri için median kompozitler üretildi. QA60+SCL+NDWI/MNDWI ile bulut/su maskelemesi yapıldı; kıyı için \SI{100}{m} tampon ve “yanıcı yüzey” filtresi (\(\mathrm{NDVI}_{\text{pre}}>0.25\)) uygulandı. dNDVI=post−pre, dNBR=pre−post tanımları kullanıldı; USGS‑benzeri eşiklerle şiddet (0–4) sınıflandırıldı.
+\textbf{Yöntem} --- Önce (1-- 10 Haziran) ve sonra (20-- 30 Ağustos) dönemleri için median kompozitler üretildi. QA60+SCL+NDWI/MNDWI ile bulut/su maskelemesi yapıldı; kıyı için \SI{100}{m} tampon ve “yanıcı yüzey” filtresi (\(\mathrm{NDVI}_{\text{pre}}>0.25\)) uygulandı. dNDVI=post-  pre, dNBR=pre-  post tanımları kullanıldı; USGS‑benzeri eşiklerle şiddet (0-- 4) sınıflandırıldı.
 
-\textbf{Bulgular} — NDVI ortalaması önce 0.451'den sonra 0.431'e düştü (\(\mathrm{dNDVI}\approx-0.022\)). dNBR ortalaması \(\approx 0.003\): genel yanıklık şiddeti düşüktür. Toplam yanmış alan \(\approx\) \num{45448.49}\,ha; yüksek/orta–yüksek şiddet cepleri sınırlı ve dağınıktır.
+\textbf{Bulgular} --- NDVI ortalaması önce 0.451'den sonra 0.431'e düştü (\(\mathrm{dNDVI}\approx-0.022\)). dNBR ortalaması \(\approx 0.003\): genel yanıklık şiddeti düşüktür. Toplam yanmış alan \(\approx\) \num{45448.49}\,ha; yüksek/orta-- yüksek şiddet cepleri sınırlı ve dağınıktır.
 
-\textbf{Sınırlılıklar} — Bulut/duman kalıntıları, aydınlatma ve fenoloji farklılıkları ile sabit eşiklerin genellenebilirliği sonuçları etkileyebilir. Su/kıyı karışımı pikseller yalancı sinyale yol açabileceğinden kıyı tamponu ve su maskelemesine dikkat edilmiştir.
+\textbf{Sınırlılıklar} --- Bulut/duman kalıntıları, aydınlatma ve fenoloji farklılıkları ile sabit eşiklerin genellenebilirliği sonuçları etkileyebilir. Su/kıyı karışımı pikseller yalancı sinyale yol açabileceğinden kıyı tamponu ve su maskelemesine dikkat edilmiştir.
 \end{minipage}}
 \end{center}
 \clearpage
@@ -94,13 +94,13 @@ NIR ile SWIR2 arasındaki farkın toplamına oranıdır:\,\(\mathrm{NBR}=(\mathr
 Bu iki göstergenin birlikte yorumlanması, hem örtü kaybını hem de yanıklık şiddetini daha güvenilir ortaya koyar.
 
 \subsection{Şiddet Sınıflandırması ve Eşikler}
-dNBR için eşik tabanlı sınıflar 0–4 arası üretilmiştir. Aşağıda sınıfların kısa tanımları verilmiştir:
+dNBR için eşik tabanlı sınıflar 0-- 4 arası üretilmiştir. Aşağıda sınıfların kısa tanımları verilmiştir:
 \begin{itemize}
-  \item \textbf{0 — Yanıksız/Çok Düşük}: Yanıklık sinyali yok ya da çok zayıf; doğal değişkenlik düzeyi.
-  \item \textbf{1 — Düşük}: Hafif etkilenmiş alan; sınırlı örtü kaybı/yanıklık izleri.
-  \item \textbf{2 — Orta–Düşük}: Belirgin ama yaygın olmayan etkiler; yer yer örtü kaybı.
-  \item \textbf{3 — Orta–Yüksek}: Kuvvetli yanıklık; belirgin örtü kaybı ve yüzey değişimi.
-  \item \textbf{4 — Yüksek}: Şiddetli yanıklık; yoğun örtü kaybı ve kalıcı izler.
+  \item \textbf{0 --- Yanıksız/Çok Düşük}: Yanıklık sinyali yok ya da çok zayıf; doğal değişkenlik düzeyi.
+  \item \textbf{1 --- Düşük}: Hafif etkilenmiş alan; sınırlı örtü kaybı/yanıklık izleri.
+  \item \textbf{2 --- Orta-- Düşük}: Belirgin ama yaygın olmayan etkiler; yer yer örtü kaybı.
+  \item \textbf{3 --- Orta-- Yüksek}: Kuvvetli yanıklık; belirgin örtü kaybı ve yüzey değişimi.
+  \item \textbf{4 --- Yüksek}: Şiddetli yanıklık; yoğun örtü kaybı ve kalıcı izler.
 \end{itemize}
 dNBR için 0--4 arası sınıflar USGS-benzeri eşiklerle (\(t_0=0.10, t_1=0.27, t_2=0.44, t_3=0.66\)) üretilmiştir. Çalışmada \texttt{gee/change.py} içinde sınıflandırma parametreleştirilmiş olup AOI'ye göre eşikler uyarlanabilmektedir.
 
@@ -170,7 +170,7 @@ Aşağıdaki tablo, bu çalışmada hesaplanan özet ölçütleri (3 ondalık) g
 \subsection*{Bulguların Özeti}
 \begin{center}
 \fbox{\begin{minipage}{0.95\textwidth}
-AOI genelinde \textit{NDVI (Önce)} = \num{0.451}, \textit{NDVI (Sonra)} = \num{0.431} olup, \(\mathrm{dNDVI} = -\num{0.022}\) olarak hesaplanmıştır. dNBR ortalaması \num{0.003} düzeyindedir. dNBR şiddet sınıflarına göre toplam yanmış alan yaklaşık \num{45448.49}\,ha olup, yüksek/orta–yüksek sınıflar sınırlıdır; etki çoğunlukla düşük şiddet düzeyindedir.
+AOI genelinde \textit{NDVI (Önce)} = \num{0.451}, \textit{NDVI (Sonra)} = \num{0.431} olup, \(\mathrm{dNDVI} = -\num{0.022}\) olarak hesaplanmıştır. dNBR ortalaması \num{0.003} düzeyindedir. dNBR şiddet sınıflarına göre toplam yanmış alan yaklaşık \num{45448.49}\,ha olup, yüksek/orta-- yüksek sınıflar sınırlıdır; etki çoğunlukla düşük şiddet düzeyindedir.
 \end{minipage}}
 \end{center}
 
