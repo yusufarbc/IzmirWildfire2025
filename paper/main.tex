@@ -47,20 +47,6 @@ Bu çalışma, 2025 İzmir orman yangınının etkilerini Sentinel-2 L2A veriler
 \tableofcontents
 \clearpage
 
-\section*{Yönetici Özeti}
-\begin{center}
-\fbox{\begin{minipage}{0.96\textwidth}
-\textbf{Amaç} --- İzmir 2025 yangınının etkisini Sentinel‑2 verisiyle nicel ve mekânsal olarak ortaya koymak; yeşil örtü kaybı (dNDVI) ve yanıklık şiddetini (dNBR) haritalamak.
-
-\textbf{Yöntem} --- Önce (1-- 10 Haziran) ve sonra (20-- 30 Ağustos) dönemleri için median kompozitler üretildi. QA60+SCL+NDWI/MNDWI ile bulut/su maskelemesi yapıldı; kıyı için \SI{100}{m} tampon ve “yanıcı yüzey” filtresi (\(\mathrm{NDVI}_{\text{pre}}>0.25\)) uygulandı. dNDVI=post-  pre, dNBR=pre-  post tanımları kullanıldı; USGS‑benzeri eşiklerle şiddet (0-- 4) sınıflandırıldı.
-
-\textbf{Bulgular} --- NDVI ortalaması önce 0.451'den sonra 0.431'e düştü (\(\mathrm{dNDVI}\approx-0.022\)). dNBR ortalaması \(\approx 0.003\): genel yanıklık şiddeti düşüktür. Toplam yanmış alan \(\approx\) \num{45448.49}\,ha; yüksek/orta-- yüksek şiddet cepleri sınırlı ve dağınıktır.
-
-\textbf{Sınırlılıklar} --- Bulut/duman kalıntıları, aydınlatma ve fenoloji farklılıkları ile sabit eşiklerin genellenebilirliği sonuçları etkileyebilir. Su/kıyı karışımı pikseller yalancı sinyale yol açabileceğinden kıyı tamponu ve su maskelemesine dikkat edilmiştir.
-\end{minipage}}
-\end{center}
-\clearpage
-\clearpage
 
 \section{Giriş}
 Yangınların ekosistem, toprak ve yerleşimler üzerindeki etkilerinin nicel ve mekânsal olarak ortaya konması; yangın sonrası rehabilitasyon, yeniden ormanlaştırma ve risk azaltma planlamaları açısından kritik öneme sahiptir. Uzaktan algılama, yüksek zamansal ve mekânsal çözünürlükte tekrarlanan gözlemler üzerinden önce-sonra karşılaştırmalarına imkân tanır. Bu çalışmada Sentinel-2 L2A verileriyle NDVI ve NBR endekslerine dayalı bir yaklaşım sunulmakta; dNDVI ve dNBR ile etki/şiddet haritaları üretilmektedir.
