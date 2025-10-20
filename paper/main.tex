@@ -10,7 +10,7 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{siunitx}
-\usepackage{csvsimple}
+\usepackage{pgfplotstable}
 \usepackage[unicode]{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \hypersetup{
@@ -298,17 +298,20 @@ Aşağıdaki tablo, analiz çıktılarından doğrudan üretilen özet değerler
   \caption{Özet istatistikler (CSV’den).}
 \end{table}
 
-\subsection{Yanıklık Alanları (CSV)}
+\\subsection{Yanıklık Alanları (CSV)}
 Şiddet sınıflarına göre alan dökümü (hektar cinsinden) aşağıda verilmiştir.
-\begin{table}[H]
-  \centering
-  \begin{tabular}{@{}ll@{}}\toprule
-  Anahtar & Alan [ha] \\ \midrule
-  \csvreader[head to column names, late after line=\\]{../results/severity_areas.csv}{}{\texttt{\key} & \num{\value}}
-  \\ \bottomrule
-  \end{tabular}
-  \caption{Şiddet sınıflarına göre alanlar ve toplam yanmış alan.}
-\end{table}
+\\begin{table}[H]
+  \\centering
+  \\pgfplotstableset{col sep=comma}
+  \\pgfplotstabletypeset[
+    string type,
+    columns/key/.style={string type,column name=Anahtar},
+    columns/value/.style={fixed,fixed zerofill,precision=2,column name=Alan [ha]},
+    every head row/.style={before row=\\toprule,after row=\\midrule},
+    every last row/.style={after row=\\bottomrule}
+  ]{../results/severity_areas.csv}
+  \\caption{Şiddet sınıflarına göre alanlar ve toplam yanmış alan.}
+\\end{table}
 \section{Sınırlılıklar ve Belirsizlikler}
 Bulut ve duman kalıntıları, geometrik/atmosferik kalıntı hataları ve sınıflandırma
 eşiklerinin genellenebilirliği sonuçları etkileyebilir. dNBR eşikleri AOI'ye ve saha
@@ -329,6 +332,7 @@ dosyasında \texttt{vis\_params()} fonksiyonunda tanımlıdır.
 
 
 \end{document}
+
 
 
 
