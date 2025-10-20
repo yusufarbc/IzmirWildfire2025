@@ -1,4 +1,4 @@
-% !TeX program = pdflatex
+﻿% !TeX program = pdflatex
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -288,33 +288,39 @@ karşılaştırılması ek bir tablo olarak verilebilir.
 
 \subsection{Özet İstatistikler (CSV’den)}
 Aşağıdaki tablo, analiz çıktılarından doğrudan üretilen özet değerleri göstermektedir.
-\begin{table}[H]
-  \centering
-%  \pgfplotstabletypeset[
-%     col sep=comma,
-%     string type,
-%     columns/metric/.style={string type,column name=Ölçüt},
-%     columns/value/.style={fixed,fixed zerofill,precision=3,column name=Değer},
-%     every head row/.style={before row=\toprule,after row=\midrule},
-%     every last row/.style={after row=\bottomrule}
-%  ]{../results/summary_stats.csv}
-  \caption{Özet istatistikler (CSV'den).}
-\end{table}
+\\begin{table}[H]
+  \\centering
+  \\begin{tabular}{@{}ll@{}}
+  \\toprule
+  Ölçüt & Değer \\\\
+  \\midrule
+  Öncesi NDVI ort. & \\num{0.4512363317636649} \\\\
+  Sonrası NDVI ort. & \\num{0.4310298119681109} \\\\
+  dNDVI ort. & \\num{-0.021754316789242518} \\\\
+  dNBR ort. & \\num{0.003119387771070351} \\\\
+  \\bottomrule
+  \\end{tabular}
+  \\caption{Özet istatistikler (statik).}
+\\end{table}
 
 \subsection{Yanıklık Alanları (CSV)}
 Şiddet sınıflarına göre alan dökümü (hektar cinsinden) aşağıda verilmiştir.
-\begin{table}[H]
-  \centering
-%  \pgfplotstabletypeset[
-%     col sep=comma,
-%     string type,
-%     columns/key/.style={string type,column name=Anahtar},
-%     columns/value/.style={fixed,fixed zerofill,precision=2,column name=Alan [ha]},
-%     every head row/.style={before row=\toprule,after row=\midrule},
-%     every last row/.style={after row=\bottomrule}
-%  ]{../results/severity_areas.csv}
-  \caption{Şiddet sınıflarına göre alanlar ve toplam yanmış alan.}
-\end{table}
+\\begin{table}[H]
+  \\centering
+  \\begin{tabular}{@{}ll@{}}
+  \\toprule
+  Sınıf & Alan [ha] \\\\
+  \\midrule
+  Yanıksız/Düşük (0) & \\num{290265.1416736105} \\\\
+  Düşük (1) & \\num{26482.592935861376} \\\\
+  Orta--Düşük (2) & \\num{7166.756883048077} \\\\
+  Orta--Yüksek (3) & \\num{6015.470567351634} \\\\
+  Yüksek (4) & \\num{5783.668938937575} \\\\
+  Toplam yanmış alan & \\num{45448.489325198665} \\\\
+  \\bottomrule
+  \\end{tabular}
+  \\caption{Şiddet sınıflarına göre alanlar (statik).}
+\\end{table}
 \section{Sınırlılıklar ve Belirsizlikler}
 Bulut ve duman kalıntıları, geometrik/atmosferik kalıntı hataları ve sınıflandırma
 eşiklerinin genellenebilirliği sonuçları etkileyebilir. dNBR eşikleri AOI'ye ve saha
