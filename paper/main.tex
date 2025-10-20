@@ -1,4 +1,4 @@
-% !TeX program = pdflatex
+﻿% !TeX program = pdflatex
 \documentclass[11pt,a4paper]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -44,16 +44,15 @@ Bu çalışma, 2025 İzmir orman yangınının etkilerini Sentinel-2 L2A veriler
 \noindent\textbf{Anahtar Kelimeler:} Sentinel-2, NDVI, NBR, dNBR, yanıklık şiddeti, uzaktan algılama, İzmir.
 
 \clearpage
-\tableofcontents
+\\clearpage
+
 \clearpage
 
 \section{Giriş}
 Yangınların ekosistem, toprak ve yerleşimler üzerindeki etkilerinin nicel ve mekânsal olarak ortaya konması; yangın sonrası rehabilitasyon, yeniden ormanlaştırma ve risk azaltma planlamaları açısından kritik öneme sahiptir. Uzaktan algılama, yüksek zamansal ve mekânsal çözünürlükte tekrarlanan gözlemler üzerinden önce-sonra karşılaştırmalarına imkân tanır. Bu çalışmada Sentinel-2 L2A verileriyle NDVI ve NBR endekslerine dayalı bir yaklaşım sunulmakta; dNDVI ve dNBR ile etki/şiddet haritaları üretilmektedir.
-
-\section{Çalışma Alanı (AOI)}
+\\section{Çalışma Alanı, Veri ve Yöntem}
+\\subsection{Çalışma Alanı (AOI)}
 Çalışma alanı İzmir ili sınırları içinde belirlenmiştir. AOI, deponun \texttt{gee/aoi.geojson} dosyasında çokgen (Polygon) olarak tanımlıdır ve analizler bu AOI üzerinde yürütülmüştür.
-
-\section{Veri ve Yöntem}
 \subsection{Veri Kaynakları ve Dönemler}
 \begin{itemize}
   \item \textbf{Uydu verisi:} Sentinel-2 L2A (10--20 m). NDVI için B8 (NIR), B4 (Kırmızı); NBR için B8 (NIR), B12 (SWIR2).
@@ -63,8 +62,7 @@ Yangınların ekosistem, toprak ve yerleşimler üzerindeki etkilerinin nicel ve
 
 \subsection{Ön İşleme ve Maskeleme}
 Önce-sonra aralıkları \texttt{COPERNICUS/S2\_SR\_HARMONIZED} koleksiyonundan AOI ve tarih filtresiyle seçilmiştir. QA60 (bulut/sirrus) maskesi, SCL su sınıfı (6) ve NDWI/MNDWI kontrolleriyle su/deniz alanları dışlanmıştır. Kıyı şeridi etkilerini azaltmak için su maskesi çevresinde \SI{100}{m} kıyı tamponu uygulanmış; yanıcı olmayan yüzeyleri dışlamak için \emph{burnable} koşulu (pre NDVI $>0.25$) kullanılmıştır. Her dönem için median kompozit üretilmiştir.
-
-\subsection{Endeksler ve Farklar}
+\\subsection{NDVI ve NBR: Tanım ve Farklar}
 NDVI $=(\mathrm{NIR}-\mathrm{Red})/(\mathrm{NIR}+\mathrm{Red})$, NBR $=(\mathrm{NIR}-\mathrm{SWIR2})/(\mathrm{NIR}+\mathrm{SWIR2})$ olarak tanımlanmıştır. Fark endeksleri \(\mathrm{dNDVI}=\mathrm{post}-\mathrm{pre}\), \(\mathrm{dNBR}=\mathrm{pre}-\mathrm{post}\) biçiminde hesaplanmıştır. Bu tanıma göre vejetasyon kaybı dNDVI$<0$, yanıklık artışı dNBR$>0$ ile ifade edilir.
 
 \subsection{Şiddet Sınıflandırması ve Eşikler}
