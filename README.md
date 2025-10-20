@@ -100,24 +100,3 @@ Notlar:
 ## Lisans
 
 Bu proje MIT lisansı altındadır. Ayrıntılar için `LICENSE` dosyasına bakınız.
-
----
-
-## Ek: NDVI/NBR ve Neden Bu Seçimler?
-
-- NDVI = (NIR - Kirmizi) / (NIR + Kirmizi)
-  - Yesil/saglikli ortu NIR'de yuksek, kirmizida dusuk yansitir; NDVI buyudukce yesillik/yoğunluk artar (0.2-0.5 orta; >0.5 yogun).
-- NBR = (NIR - SWIR2) / (NIR + SWIR2)
-  - Yanik yuzeylerde NIR azalir, SWIR artar; yangin oncesi NBR daha yuksek, sonrasi daha dusuktur.
-- Farklar
-  - dNDVI = Sonra - Once (negatifse yesil ortu kaybi)
-  - dNBR  = Once - Sonra (pozitifse yaniklik artisi)
-
-Neden boyle?
-
-- Sentinel-2 ve median kompozit: 10-20 m cozunurluk; median tekil bulut/duman artiklarini bastirir.
-- Maskeleme: QA60 + SCL (su) + NDWI/MNDWI; kyi icin 100 m tampon ile su/kiyi yalanci sinyalleri dislandi.
-- Yanici yuzey filtresi: NDVIpre > 0.25 ile ciplak/yapay yuzeyler elenir; analiz yanabilir ortuye odaklanir.
-- Fark tanimi: dNBR=pre-post (pozitif=yaniklik artisi), dNDVI=post-once (negatif=yesil kaybi) sezgiseldir.
-- Donemler: Sonrasi 20-30 Agustos; Oncesi 1-10 Haziran.
-- Esikler: USGS-benzeri sabit esikler kolay yorumlanir ve sahaya gore ayarlanabilir.
