@@ -83,6 +83,10 @@
         footer { color: var(--muted); font-size: 13px; padding: 28px 0 10px; border-top: 1px solid #eef1f5; }
         .downloads { display: flex; gap: 10px; flex-wrap: wrap; }
         .download { border: 1px dashed #d1d5db; padding: 10px 12px; border-radius: 8px; background: #fff; }
+        /* Intro (wide, non-card) */
+        .intro { margin: 8px 0 18px; }
+        .intro .lead { font-size: 15px; color: #374151; margin: 0 0 8px; }
+        .intro ul { margin: 0 0 0 18px; color: #374151; font-size: 13px; line-height: 1.55; }
         @media (max-width: 560px) { h1 { font-size: 22px; } }
     </style>
 </head>
@@ -103,23 +107,16 @@
 
     <main>
         <div class="wrap">
-            <section>
-                <div class="grid">
-                    <article class="card" aria-label="Proje özeti">
-                        <div class="body">
-                            <h3 class="title">İzmir 2025 — Proje Özeti</h3>
-                            <p class="desc">
-                                Sentinel‑2 tabanlı NDVI/NBR fark analizleri ile yangın etkisi (yeşil örtü kaybı ve yanıklık şiddeti) haritalanmıştır.
-                                Maskeleme (QA60+SCL+NDWI/MNDWI) ve 100 m kıyı tamponu ile su/kıyı yalancı sinyalleri elenmiş; <code>NDVIpre&gt;0.25</code>
-                                koşulu ile analiz yanabilir örtüye odaklanmıştır.
-                            </p>
-                            <ul style="margin:0 0 8px 16px; color:#374151; font-size:13px; line-height:1.5;">
-                                <li><b>Yöntem:</b> Önce 1–10 Haz., sonra 20–30 Ağu.; dNDVI=post−pre, dNBR=pre−post; sınıflar 0–4 (USGS‑benzeri).</li>
-                                <li><b>Bulgular:</b> NDVI 0.451→0.431 (dNDVI≈−0.022); dNBR≈0.003; toplam yanmış ≈ 45,448.49 ha; şiddet çoğunlukla düşük.</li>
-                            </ul>
-                        </div>
-                    </article>
-                </div>
+            <section class="intro" aria-label="Proje özeti">
+                <p class="lead">
+                    Sentinel‑2 tabanlı NDVI/NBR fark analizleri ile yangın etkisi (yeşil örtü kaybı ve yanıklık şiddeti) haritalanmıştır.
+                    QA60+SCL+NDWI/MNDWI maskelemesi ve 100 m kıyı tamponu ile su/kıyı yalancı sinyalleri elenmiş; <code>NDVIpre&gt;0.25</code>
+                    koşulu ile analiz yanabilir örtüye odaklanmıştır.
+                </p>
+                <ul>
+                    <li><b>Yöntem:</b> Önce 1–10 Haz., sonra 20–30 Ağu.; dNDVI=post−pre, dNBR=pre−post; sınıflar 0–4 (USGS‑benzeri).</li>
+                    <li><b>Bulgular:</b> NDVI 0.451→0.431 (dNDVI≈−0.022); dNBR≈0.003; toplam yanmış ≈ 45,448.49 ha; şiddet çoğunlukla düşük.</li>
+                </ul>
             </section>
             <section>
                 <h2 class="section-title">Nasıl Okunur?</h2>
