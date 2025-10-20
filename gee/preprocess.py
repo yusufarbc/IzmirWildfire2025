@@ -12,14 +12,29 @@ def _mask_s2_sr(image: ee.Image) -> ee.Image:
     return image.updateMask(mask)
 
 
+def _mask_scl_water_and_shadows(image: ee.Image) -> ee.Image:
+    """Use S2 SCL to mask water and cloud shadows optionally.
+
+    SCL classes (common): 6=Water, 3=Cloud shadow, 8=Cloud medium prob, 9=Cloud high prob, 10=Thin cirrus.
+    We only mask water here; clouds are handled in QA60 mask above.
+    """
+    scl = image.select("SCL")
+    water = scl.eq(6)
+    # Mask out water
+    return image.updateMask(water.Not())
+
+
 def prepare_composite(aoi: ee.Geometry, start: str, end: str) -> ee.Image:
-    """Prepare median Sentinel-2 SR composite clipped to AOI for date range."""
+    """Prepare median Sentinel-2 SR composite clipped to AOI for date range.
+
+    Applies QA60 cloud/cirrus mask and SCL-based water mask.
+    """
     col = (
         ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
         .filterDate(start, end)
         .filterBounds(aoi)
         .map(_mask_s2_sr)
+        .map(_mask_scl_water_and_shadows)
     )
     img = col.median().clip(aoi)
     return img
-

@@ -66,7 +66,19 @@ def run_pipeline(
     post = with_indices(prepare_composite(aoi, post_start, post_end))
 
     diffs = compute_diffs(pre, post)
-    severity = classify_dnbr(diffs["dNBR"], thresholds=dnbr_thresholds)  # 0..4
+
+    # Build masks to exclude water and non-burnable surfaces
+    # Non-water: NDWI/MNDWI both not strongly water-like in either period
+    non_water = (
+        pre.select("NDWI").lt(0).And(post.select("NDWI").lt(0))
+        .And(pre.select("MNDWI").lt(0.1)).And(post.select("MNDWI").lt(0.1))
+    )
+    # Burnable vegetation: keep pixels with sufficient pre-vegetation
+    burnable = pre.select("NDVI").gt(0.25)
+
+    mask = non_water.And(burnable)
+    dnbr_masked = diffs["dNBR"].updateMask(mask)
+    severity = classify_dnbr(dnbr_masked, thresholds=dnbr_thresholds)  # 0..4
 
     vp = vis_params()
     os.makedirs(out_dir, exist_ok=True)
@@ -95,10 +107,10 @@ def run_pipeline(
     save_folium(post.select("NBR"), aoi, vp["NBR"], f"Post NBR {post_label}", outputs["post_nbr_map"])
 
     outputs["dndvi_map"] = os.path.join(out_dir, "dNDVI.html")
-    save_folium(diffs["dNDVI"], aoi, vp["dNDVI"], f"dNDVI {pre_label} vs {post_label}", outputs["dndvi_map"])
+    save_folium(diffs["dNDVI"].updateMask(mask), aoi, vp["dNDVI"], f"dNDVI {pre_label} vs {post_label}", outputs["dndvi_map"])
 
     outputs["dnbr_map"] = os.path.join(out_dir, "dNBR.html")
-    save_folium(diffs["dNBR"], aoi, vp["dNBR"], f"dNBR {pre_label} vs {post_label}", outputs["dnbr_map"])
+    save_folium(dnbr_masked, aoi, vp["dNBR"], f"dNBR {pre_label} vs {post_label}", outputs["dnbr_map"])
 
     outputs["severity_map"] = os.path.join(out_dir, "severity.html")
     save_folium(severity, aoi, vp["severity"], f"dNBR Severity {pre_label} vs {post_label}", outputs["severity_map"])
@@ -119,4 +131,3 @@ def run_pipeline(
     write_kv_csv(outputs["severity_areas_csv"], areas)
 
     return outputs
-
