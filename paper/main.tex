@@ -1,4 +1,4 @@
-% !TeX program = pdflatex
+﻿% !TeX program = pdflatex
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -179,12 +179,12 @@ Bu çalışmada pipeline, öncesi için \texttt{2025-06-01--2025-06-10}, sonras�
 \begin{table}[h]
   \centering
   \begin{tabular}{@{}lll@{}}\toprule
-  Sınıf & Kod & dNBR Eşiği \\\midrule
+  Sınıf & Kod & dNBR Eşiği \\midrule
   Yanıksız/Düşük & 0 & $\leq 0.10$ \\
   Düşük & 1 & $(0.10,\,0.27]$ \\
   Orta--Düşük & 2 & $(0.27,\,0.44]$ \\
   Orta--Yüksek & 3 & $(0.44,\,0.66]$ \\
-  Yüksek & 4 & $> 0.66$ \\\bottomrule
+  Yüksek & 4 & $> 0.66$ \\bottomrule
   \end{tabular}
   \caption{dNBR eşikleri ile önerilen şiddet sınıfları (örnek).}
 \end{table}
@@ -298,20 +298,20 @@ Aşağıdaki tablo, analiz çıktılarından doğrudan üretilen özet değerler
   \caption{Özet istatistikler (CSV’den).}
 \end{table}
 
-\\subsection{Yanıklık Alanları (CSV)}
+\subsection{Yanıklık Alanları (CSV)}
 Şiddet sınıflarına göre alan dökümü (hektar cinsinden) aşağıda verilmiştir.
-\\begin{table}[H]
-  \\centering
-  \\pgfplotstableset{col sep=comma}
-  \\pgfplotstabletypeset[
+\begin{table}[H]
+  \centering
+  \pgfplotstableset{col sep=comma}
+  \pgfplotstabletypeset[
     string type,
     columns/key/.style={string type,column name=Anahtar},
     columns/value/.style={fixed,fixed zerofill,precision=2,column name=Alan [ha]},
-    every head row/.style={before row=\\toprule,after row=\\midrule},
-    every last row/.style={after row=\\bottomrule}
+    every head row/.style={before row=\toprule,after row=\midrule},
+    every last row/.style={after row=\bottomrule}
   ]{../results/severity_areas.csv}
-  \\caption{Şiddet sınıflarına göre alanlar ve toplam yanmış alan.}
-\\end{table}
+  \caption{Şiddet sınıflarına göre alanlar ve toplam yanmış alan.}
+\end{table}
 \section{Sınırlılıklar ve Belirsizlikler}
 Bulut ve duman kalıntıları, geometrik/atmosferik kalıntı hataları ve sınıflandırma
 eşiklerinin genellenebilirliği sonuçları etkileyebilir. dNBR eşikleri AOI'ye ve saha
@@ -332,6 +332,7 @@ dosyasında \texttt{vis\_params()} fonksiyonunda tanımlıdır.
 
 
 \end{document}
+
 
 
 
