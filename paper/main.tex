@@ -1,4 +1,4 @@
-﻿% !TeX program = pdflatex
+% !TeX program = pdflatex
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -290,14 +290,14 @@ karşılaştırılması ek bir tablo olarak verilebilir.
 Aşağıdaki tablo, analiz çıktılarından doğrudan üretilen özet değerleri göstermektedir.
 \begin{table}[H]
   \centering
-  \pgfplotstabletypeset[
-    col sep=comma,
-    string type,
-    columns/metric/.style={string type,column name=Ölçüt},
-    columns/value/.style={fixed,fixed zerofill,precision=3,column name=Değer},
-    every head row/.style={before row=\toprule,after row=\midrule},
-    every last row/.style={after row=\bottomrule}
-  ]{../results/summary_stats.csv}
+%  \pgfplotstabletypeset[
+%     col sep=comma,
+%     string type,
+%     columns/metric/.style={string type,column name=Ölçüt},
+%     columns/value/.style={fixed,fixed zerofill,precision=3,column name=Değer},
+%     every head row/.style={before row=\toprule,after row=\midrule},
+%     every last row/.style={after row=\bottomrule}
+%  ]{../results/summary_stats.csv}
   \caption{Özet istatistikler (CSV'den).}
 \end{table}
 
@@ -305,14 +305,14 @@ Aşağıdaki tablo, analiz çıktılarından doğrudan üretilen özet değerler
 Şiddet sınıflarına göre alan dökümü (hektar cinsinden) aşağıda verilmiştir.
 \begin{table}[H]
   \centering
-  \pgfplotstabletypeset[
-    col sep=comma,
-    string type,
-    columns/key/.style={string type,column name=Anahtar},
-    columns/value/.style={fixed,fixed zerofill,precision=2,column name=Alan [ha]},
-    every head row/.style={before row=\toprule,after row=\midrule},
-    every last row/.style={after row=\bottomrule}
-  ]{../results/severity_areas.csv}
+%  \pgfplotstabletypeset[
+%     col sep=comma,
+%     string type,
+%     columns/key/.style={string type,column name=Anahtar},
+%     columns/value/.style={fixed,fixed zerofill,precision=2,column name=Alan [ha]},
+%     every head row/.style={before row=\toprule,after row=\midrule},
+%     every last row/.style={after row=\bottomrule}
+%  ]{../results/severity_areas.csv}
   \caption{Şiddet sınıflarına göre alanlar ve toplam yanmış alan.}
 \end{table}
 \section{Sınırlılıklar ve Belirsizlikler}
