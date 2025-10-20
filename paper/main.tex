@@ -4,13 +4,13 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{microtype}
-\usepackage[english, turkish]{babel}
+\usepackage[main=turkish, english]{babel}
 \usepackage{geometry}
 \geometry{margin=2cm}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{siunitx}
-\usepackage{hyperref}
+\usepackage[unicode]{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \hypersetup{
   colorlinks=true,
@@ -31,6 +31,7 @@
 \date{Tarih: \today}
 
 \begin{document}
+\selectlanguage{turkish}
 \sloppy
 \maketitle
 \thispagestyle{empty}
@@ -40,7 +41,6 @@
 \clearpage
 
 % Turkish abstract (Özet)
-\selectlanguage{turkish}
 \renewcommand{\abstractname}{Özet}
 \begin{abstract}
 Bu çalışma, 2025 İzmir orman yangınının etkilerini Sentinel-2 L2A verileri kullanılarak
@@ -217,8 +217,8 @@ hektar cinsinden $A_k/10^4$ ile verilir.
     \resizebox{\linewidth}{!}{\includegraphics{../results/post_RGB.png}}
     \caption{Sonrası RGB (B4,B3,B2)}
   \end{subfigure}
-  \\caption{Doğal renk (RGB) karşılaştırması.}
-  \\label{fig:rgb}
+  \caption{Doğal renk (RGB) karşılaştırması.}
+  \label{fig:rgb}
 \end{figure}
 \FloatBarrier
 
@@ -251,8 +251,8 @@ hektar cinsinden $A_k/10^4$ ile verilir.
     \resizebox{\linewidth}{!}{\includegraphics{../results/post_NDVI.png}}
     \caption{Sonrası NDVI}
   \end{subfigure}
-  \\caption{NDVI karşılaştırması.}
-  \\label{fig:ndvi}
+  \caption{NDVI karşılaştırması.}
+  \label{fig:ndvi}
 \end{figure}
 \FloatBarrier
 
@@ -268,18 +268,18 @@ hektar cinsinden $A_k/10^4$ ile verilir.
     \resizebox{\linewidth}{!}{\includegraphics{../results/severity.png}}
     \caption{dNBR Şiddeti (0--4)}
   \end{subfigure}
-  \\caption{Fark analizi ve şiddet sınıfları.}
-  \\label{fig:diffs}
+  \caption{Fark analizi ve şiddet sınıfları.}
+  \label{fig:diffs}
 \end{figure}
 
-\subsection{\u00D6zet \u0130statistikler}
-\noindent Ortalama de\u011ferler:
-\\begin{itemize}
-  \\item \textbf{\u00D6ncesi NDVI ort.}: 0.365
-  \\item \textbf{Sonras\u0131 NDVI ort.}: 0.344
-  \\item \textbf{dNDVI ort.}: $-0.020$
-  \\item \textbf{dNBR ort.}: -0.038
-\\end{itemize}
+\subsection{Özet İstatistikler}
+\noindent Ortalama değerler:
+\begin{itemize}
+  \item \textbf{Öncesi NDVI ort.}: 0.365
+  \item \textbf{Sonrası NDVI ort.}: 0.344
+  \item \textbf{dNDVI ort.}: $-0.020$
+  \item \textbf{dNBR ort.}: -0.038
+\end{itemize}
 Bu bölümde sunulan özet, yangın öncesi ve sonrası bitki örtüsü durumunu (NDVI) ve yangın etkisini (dNBR) nicel olarak ifade eder. NDVI 0 ile 1 arasında değer alır; daha yüksek değerler daha yoğun ve sağlıklı bitki örtüsünü gösterir. dNDVI iki tarih arasındaki NDVI farkıdır; negatif değerler yeşil örtüde azalmayı ifade eder. dNBR ise yanma şiddetine duyarlı bir fark ölçütüdür; yaklaşık 0.10--0.27 aralığı düşük, 0.27--0.44 aralığı orta, 0.44 ve üzeri daha yüksek şiddet seviyelerine karşılık gelir. Tablodaki ortalamalar, AOI genelinde NDVI’da \(\sim0.073\) birimlik düşüş (yaklaşık 0.584'ten 0.511'e; \(dNDVI<0\), bağıl \(\sim12.5\%\)) ve \(dNBR \approx 0.074\) ile çoğunlukla çok düşük/düşük şiddet sinyaline işaret etmektedir. Ancak bu değerler mekânsal farklılıkları düzler; yer yer daha yüksek şiddetli cepler bulunabilir. Bu nedenle yorum, şiddet haritaları ve sınıf dağılımı ile birlikte değerlendirilmelidir.
 
 Etkilenen alan büyüklükleri, sınıf piksel sayıları ve/veya eşiklerin literatürle
