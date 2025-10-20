@@ -1,4 +1,4 @@
-﻿% !TeX program = pdflatex
+% !TeX program = pdflatex
 \documentclass[11pt,a4paper]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -119,6 +119,9 @@ Aşağıdaki tablo, bu çalışmada hesaplanan özet ölçütleri (3 ondalık) g
   \caption{Özet istatistikler (statik değerler).}
 \end{table}
 
+\\noindent Bu tablo, çalışma dönemleri arasında yeşil örtüde sınırlı ancak ölçülebilir bir azalışa işaret etmektedir: NDVI ortalaması önce 0.451 iken sonra 0.431’e düşmüş (dNDVI ≈ −0.022). dNBR ortalaması ≈ 0.003 olduğundan, genel yanıklık şiddeti düşük düzeydedir; bu da geniş alanlı ağır yanıklar yerine dağınık ve düşük şiddetli etkilerin baskın olduğunu gösterir.
+
+
 \subsection{Şiddet Alanları}
 Şiddet sınıflarına göre alan dökümü (hektar) Tablo~\ref{tab:areas}'da verilmiştir.
 \begin{table}[H]
@@ -138,6 +141,9 @@ Aşağıdaki tablo, bu çalışmada hesaplanan özet ölçütleri (3 ondalık) g
   \caption{dNBR şiddet sınıflarına göre alanlar.}
   \label{tab:areas}
 \end{table}
+
+\\noindent Şiddet dağılımı, yanıklık sinyalinin büyük kısmının “Yanıksız/Çok Düşük (0)” sınıfında toplandığını göstermektedir (≈ \num{290265.14} ha). Düşük ve Orta–Düşük sınıflar (1–2) sınırlı büyüklükte alanlara karşılık gelirken, Orta–Yüksek ve Yüksek sınıflar (3–4) daha küçük ceplere işaret etmektedir. Toplam yanmış alan ≈ \num{45448.49} ha olup, bu değer AOI genelinde düşük/dağınık yanıklık paternleriyle uyumludur.
+
 
 \subsection*{Bulguların Özeti}
 \begin{center}
@@ -214,9 +220,6 @@ AOI genelinde \textit{NDVI (Önce)} = \num{0.451}, \textit{NDVI (Sonra)} = \num{
   \label{fig:diffs}
 \end{figure}
 \FloatBarrier
-
-\section{Tartışma}
-Uygulanan su/deniz ve kıyı filtreleri yalancı pozitifleri belirgin biçimde azaltmıştır. Bununla birlikte fenoloji farklılıkları ve aydınlatma geometrisi bölgesel önyargılar doğurabilir. 
 
 \section{Sınırlılıklar ve Belirsizlikler}
 \begin{itemize}
