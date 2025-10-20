@@ -65,19 +65,35 @@ Yangınların ekosistem, toprak ve yerleşimler üzerindeki etkilerinin nicel ve
 \\subsection{NDVI ve NBR: Tanım, Yorum ve Farklar}
 NDVI $=(\mathrm{NIR}-\mathrm{Red})/(\mathrm{NIR}+\mathrm{Red})$, NBR $=(\mathrm{NIR}-\mathrm{SWIR2})/(\mathrm{NIR}+\mathrm{SWIR2})$ olarak tanımlanmıştır. Fark endeksleri \(\mathrm{dNDVI}=\mathrm{post}-\mathrm{pre}\), \(\mathrm{dNBR}=\mathrm{pre}-\mathrm{post}\) biçiminde hesaplanmıştır. Bu tanıma göre vejetasyon kaybı dNDVI$<0$, yanıklık artışı dNBR$>0$ ile ifade edilir.
 
+\subsection{Sade Açıklamalar}
+\paragraph{NDVI nedir?}
+Yakın kızılötesi (NIR) ile kırmızı bant arasındaki farkın toplamına oranıdır:\,\(\mathrm{NDVI}=(\mathrm{NIR}-\mathrm{Red})/(\mathrm{NIR}+\mathrm{Red})\). Sağlıklı bitki örtüsü NIR'de yüksek, kırmızıda düşük yansıtır; bu nedenle NDVI büyüdükçe yeşillik/yoğunluk artar (0.2--0.5 orta, >0.5 yoğun).
+
+\paragraph{NBR nedir?}
+NIR ile SWIR2 arasındaki farkın toplamına oranıdır:\,\(\mathrm{NBR}=(\mathrm{NIR}-\mathrm{SWIR2})/(\mathrm{NIR}+\mathrm{SWIR2})\). Yanık yüzeylerde NIR azalır, SWIR artar; yangın öncesi NBR genellikle daha yüksek, yangın sonrası daha düşüktür.
+
+\paragraph{Fark endeksleri neyi gösterir?}
+\begin{itemize}
+  \item \(\mathrm{dNDVI}=\mathrm{post}-\mathrm{pre}\): Negatif ise yeşil örtü kaybı vardır.
+  \item \(\mathrm{dNBR}=\mathrm{pre}-\mathrm{post}\): Pozitif ise yanıklık artışı vardır.
+\end{itemize}
+Bu iki göstergenin birlikte yorumlanması, hem örtü kaybını hem de yanıklık şiddetini daha güvenilir ortaya koyar.
+
 \subsection{Şiddet Sınıflandırması ve Eşikler}
 dNBR için 0--4 arası sınıflar USGS-benzeri eşiklerle (\(t_0=0.10, t_1=0.27, t_2=0.44, t_3=0.66\)) üretilmiştir. Çalışmada \texttt{gee/change.py} içinde sınıflandırma parametreleştirilmiş olup AOI'ye göre eşikler uyarlanabilmektedir.
 
 \subsection{Uygulama ve Depo Yapısı}
 Kodlar \texttt{gee/} altında düzenlenmiştir: \texttt{pipeline.py} (uçtan uca akış), \texttt{preprocess.py} (maskeleme/kompozit), \texttt{indices.py} (NDVI/NBR/NDWI/MNDWI), \texttt{change.py} (dNDVI/dNBR, sınıflandırma), \texttt{visualize.py} (harita/PNG/istatistik). Çıktılar \texttt{results/} klasöründe HTML/PNG/CSV olarak üretilmiştir. Web sunumu için depo kökündeki \texttt{index.html} kullanılmaktadır.
 
-\subsection{Yöntemsel İyileştirmeler ve Parametreler}
-Yalancı pozitifleri azaltmak ve sahanın heterojenliğini daha iyi yakalamak için şu ayarlar uygulanmıştır:
+\subsection{Neden Bu Seçimleri Yaptık?}
+Bu seçimler, yalancı sinyalleri azaltıp yorumlanabilirliği artırmak içindir:
 \begin{itemize}
-  \item \textbf{Kıyı tamponu:} Su maskesi çevresinde \SI{100}{m} tampon ile kıyı-karışım pikselleri dışlanmıştır.
-  \item \textbf{Yanıcı yüzey filtresi:} \(\mathrm{NDVI}_{\text{pre}}>0.25\) ile yanıcı olmayan yüzeyler elenmiştir.
-  \item \textbf{Eşik parametrizasyonu:} dNBR eşikleri \((t_0,t_1,t_2,t_3)\) AOI'ye göre ayarlanabilir kılınmıştır.
-  \item \textbf{Dönem seçimi:} Sonrası için 20--30 Ağustos aralığı tercih edilmiştir.
+  \item \textbf{Sentinel-2 ve median kompozit:} 10--20 m çözünürlük ve sık tekrar sayesinde önce/sonra karşılaştırmaları güvenilir; median tekil bulut/duman artıklarını bastırır.
+  \item \textbf{Maskeleme:} QA60 (bulut/sirrus) + SCL su sınıfı ve NDWI/MNDWI ile su/deniz alanları dışlandı; kıyı şeridi için \SI{100}{m} tampon eklendi.
+  \item \textbf{Yanıcı yüzey filtresi:} \(\mathrm{NDVI}_{\text{pre}}>0.25\) koşulu, çıplak/toprak/yapay yüzeyleri eler; analiz yanabilir örtüye odaklanır.
+  \item \textbf{Fark tanımı:} dNBR=pre--post yanıklık artışını pozitif yapar; dNDVI=post--pre yeşil kaybını negatifleştirir; birlikte daha sağlam yorum sağlar.
+  \item \textbf{Dönem seçimi:} Sonrası 20--30 Ağustos duman/geçici etkiler azalmışken, öncesi 1--10 Haziran fenolojik uyumu destekler.
+  \item \textbf{Eşikler:} USGS-benzeri sabit eşikler yorumlanabilir ve sahaya göre ayarlanabilir; tutarlı karşılaştırma sağlar.
 \end{itemize}
 
 \subsection{Doğrulama ve Geçerlilik}
