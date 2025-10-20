@@ -70,6 +70,9 @@ outputs = run_pipeline(
     out_dir="results",
     # Opsiyonel: AOI'ye göre dNBR eşiklerini özelleştir
     dnbr_thresholds=(0.08, 0.22, 0.40, 0.60),
+    # Opsiyonel: Kıyı tamponu (metre) ve minimum yama alanı (hektar)
+    coastline_buffer_m=100,
+    min_patch_ha=0.5,
 )
 
 print(outputs)

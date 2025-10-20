@@ -42,6 +42,8 @@ def run_pipeline(
     project: Optional[str] = None,
     area_scale: int = 10,
     dnbr_thresholds: Optional[tuple[float, float, float, float]] = None,
+    coastline_buffer_m: Optional[int] = None,
+    min_patch_ha: Optional[float] = None,
 ) -> Dict[str, str]:
     """Analizi çalıştır ve çıktı dosya yollarını döndür.
 
@@ -55,6 +57,8 @@ def run_pipeline(
         project: (opsiyonel) GEE proje ID
         area_scale: Alan hesapları için çözünürlük (metre)
         dnbr_thresholds: Opsiyonel dNBR eşikleri (t0,t1,t2,t3)
+        coastline_buffer_m: Opsiyonel kıyı tamponu (metre). Su maskesi çevresinde buffer alıp hariç tutar.
+        min_patch_ha: Opsiyonel minimum yama alanı (hektar). Bu eşik altındaki yanık yamaları kaldırılır.
     Returns:
         Üretilen haritalar ve CSV'lerin dosya yolları.
     """
@@ -67,7 +71,7 @@ def run_pipeline(
 
     diffs = compute_diffs(pre, post)
 
-    # Build masks to exclude water and non-burnable surfaces
+    # Build masks to exclude water/coastline and non-burnable surfaces
     # Non-water: NDWI/MNDWI both not strongly water-like in either period
     non_water = (
         pre.select("NDWI").lt(0).And(post.select("NDWI").lt(0))
@@ -77,8 +81,29 @@ def run_pipeline(
     burnable = pre.select("NDVI").gt(0.25)
 
     mask = non_water.And(burnable)
+
+    # Optional coastline buffer: expand water mask and exclude buffered fringe
+    if coastline_buffer_m and coastline_buffer_m > 0:
+        water_mask = non_water.Not()  # pixels likely water
+        kernel = ee.Kernel.circle(radius=coastline_buffer_m, units='meters')
+        coast_buffer = water_mask.focal_max(kernel=kernel)
+        non_coastline = coast_buffer.Not()
+        mask = mask.And(non_coastline)
+
     dnbr_masked = diffs["dNBR"].updateMask(mask)
     severity = classify_dnbr(dnbr_masked, thresholds=dnbr_thresholds)  # 0..4
+
+    # Optional minimum patch area filter on burned classes (>0)
+    if min_patch_ha and min_patch_ha > 0:
+        burn_mask = severity.gt(0)
+        # Connected pixel count (8-connected)
+        cpc = burn_mask.connectedPixelCount(maxSize=4096, eightConnected=True)
+        px_area = ee.Image.pixelArea()
+        comp_area_m2 = cpc.multiply(px_area)
+        keep = comp_area_m2.gte(min_patch_ha * 10000.0)
+        # Keep unburned or burned-and-large
+        keep_mask = burn_mask.And(keep).Or(severity.eq(0))
+        severity = severity.updateMask(keep_mask)
 
     vp = vis_params()
     os.makedirs(out_dir, exist_ok=True)
