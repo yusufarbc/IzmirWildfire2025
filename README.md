@@ -68,6 +68,8 @@ outputs = run_pipeline(
     post_start="2025-08-20", post_end="2025-08-30",  # Sonrası için 20–30 Ağustos
     aoi_geojson="gee/aoi.geojson",
     out_dir="results",
+    # Opsiyonel: AOI'ye göre dNBR eşiklerini özelleştir
+    dnbr_thresholds=(0.08, 0.22, 0.40, 0.60),
 )
 
 print(outputs)

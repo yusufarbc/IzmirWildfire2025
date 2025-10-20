@@ -1,4 +1,4 @@
-"""Uçtan uca analiz hattı (pipeline) — yalnızca `gee.*` modülleri ile.
+"""Uçtan uca analiz hattı (pipeline) - yalnızca `gee.*` modülleri ile.
 
 Kullanım (notebook içinde):
     from gee.pipeline import run_pipeline
@@ -41,6 +41,7 @@ def run_pipeline(
     out_dir: str = "results",
     project: Optional[str] = None,
     area_scale: int = 10,
+    dnbr_thresholds: Optional[tuple[float, float, float, float]] = None,
 ) -> Dict[str, str]:
     """Analizi çalıştır ve çıktı dosya yollarını döndür.
 
@@ -53,6 +54,7 @@ def run_pipeline(
         out_dir: Çıktı klasörü
         project: (opsiyonel) GEE proje ID
         area_scale: Alan hesapları için çözünürlük (metre)
+        dnbr_thresholds: Opsiyonel dNBR eşikleri (t0,t1,t2,t3)
     Returns:
         Üretilen haritalar ve CSV'lerin dosya yolları.
     """
@@ -64,7 +66,7 @@ def run_pipeline(
     post = with_indices(prepare_composite(aoi, post_start, post_end))
 
     diffs = compute_diffs(pre, post)
-    severity = classify_dnbr(diffs["dNBR"])  # 0..4
+    severity = classify_dnbr(diffs["dNBR"], thresholds=dnbr_thresholds)  # 0..4
 
     vp = vis_params()
     os.makedirs(out_dir, exist_ok=True)

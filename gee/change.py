@@ -4,26 +4,33 @@ import ee
 
 
 def compute_diffs(pre: ee.Image, post: ee.Image) -> dict:
-    """Compute difference images for NDVI and NBR (post - pre)."""
+    """Compute difference images.
+
+    dNDVI = post - pre (vejetasyon düşüşleri negatif)
+    dNBR  = pre - post (yanıklık artışı pozitif)
+    """
     dndvi = post.select("NDVI").subtract(pre.select("NDVI")).rename("dNDVI")
-    dnbr = post.select("NBR").subtract(pre.select("NBR")).rename("dNBR")
+    dnbr = pre.select("NBR").subtract(post.select("NBR")).rename("dNBR")
     return {"dNDVI": dndvi, "dNBR": dnbr}
 
 
-def classify_dnbr(dnbr: ee.Image) -> ee.Image:
-    """Classify dNBR into severity classes 0..4 (unburned→high).
+def classify_dnbr(
+    dnbr: ee.Image,
+    thresholds: tuple[float, float, float, float] | None = None,
+) -> ee.Image:
+    """Classify dNBR into severity classes 0..4 (unburned->high).
 
-    Thresholds (approx USGS):
+    thresholds: optional tuple (t0, t1, t2, t3). Defaults to USGS-like:
       < 0.10: 0 (Unburned/Low)
       0.10–0.27: 1 (Low)
       0.27–0.44: 2 (Moderate-Low)
       0.44–0.66: 3 (Moderate-High)
       > 0.66: 4 (High)
     """
-    t0 = 0.10
-    t1 = 0.27
-    t2 = 0.44
-    t3 = 0.66
+    if thresholds is None:
+        t0, t1, t2, t3 = 0.10, 0.27, 0.44, 0.66
+    else:
+        t0, t1, t2, t3 = thresholds
 
     c0 = dnbr.lt(t0)
     c1 = dnbr.gte(t0).And(dnbr.lt(t1))
