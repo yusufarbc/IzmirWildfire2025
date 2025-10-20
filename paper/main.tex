@@ -1,4 +1,4 @@
-% !TeX program = pdflatex
+﻿% !TeX program = pdflatex
 \documentclass[11pt,a4paper]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -62,7 +62,7 @@ Yangınların ekosistem, toprak ve yerleşimler üzerindeki etkilerinin nicel ve
 
 \subsection{Ön İşleme ve Maskeleme}
 Önce-sonra aralıkları \texttt{COPERNICUS/S2\_SR\_HARMONIZED} koleksiyonundan AOI ve tarih filtresiyle seçilmiştir. QA60 (bulut/sirrus) maskesi, SCL su sınıfı (6) ve NDWI/MNDWI kontrolleriyle su/deniz alanları dışlanmıştır. Kıyı şeridi etkilerini azaltmak için su maskesi çevresinde \SI{100}{m} kıyı tamponu uygulanmış; yanıcı olmayan yüzeyleri dışlamak için \emph{burnable} koşulu (pre NDVI $>0.25$) kullanılmıştır. Her dönem için median kompozit üretilmiştir.
-\\subsection{NDVI ve NBR: Tanım ve Farklar}
+\\subsection{NDVI ve NBR: Tanım, Yorum ve Farklar}
 NDVI $=(\mathrm{NIR}-\mathrm{Red})/(\mathrm{NIR}+\mathrm{Red})$, NBR $=(\mathrm{NIR}-\mathrm{SWIR2})/(\mathrm{NIR}+\mathrm{SWIR2})$ olarak tanımlanmıştır. Fark endeksleri \(\mathrm{dNDVI}=\mathrm{post}-\mathrm{pre}\), \(\mathrm{dNBR}=\mathrm{pre}-\mathrm{post}\) biçiminde hesaplanmıştır. Bu tanıma göre vejetasyon kaybı dNDVI$<0$, yanıklık artışı dNBR$>0$ ile ifade edilir.
 
 \subsection{Şiddet Sınıflandırması ve Eşikler}
@@ -111,7 +111,7 @@ Aşağıdaki tablo, bu çalışmada hesaplanan özet ölçütleri (3 ondalık) g
   \toprule
   Sınıf & Alan [ha] \\
   \midrule
-  Yanıksız/Düşük (0) & \num{290265.14} \\
+  Yanıksız/Çok Düşük (0) & \num{290265.14} \\
   Düşük (1) & \num{26482.59} \\
   Orta--Düşük (2) & \num{7166.76} \\
   Orta--Yüksek (3) & \num{6015.47} \\
