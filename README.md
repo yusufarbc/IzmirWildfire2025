@@ -1,4 +1,4 @@
-﻿# IzmirWildfire2025: Orman Yangını Etkisi Analizi
+# IzmirWildfire2025: Orman Yangını Etkisi Analizi
 
 Sentinel‑2 uydu görüntüleri kullanılarak 2025 İzmir yangınının etkilerini (yanma şiddeti, hasar) değerlendirmeye yönelik Google Earth Engine (GEE) tabanlı analiz projesi. NDVI, NBR ve fark indeksleri (dNDVI, dNBR) üretilir; dNBR eşikleriyle şiddet sınıflandırması yapılır.
 
@@ -84,15 +84,19 @@ Not: Bu çalışmada sonrası (post) dönem için 20–30 Ağustos aralığı ba
 
 ## Rapor (LaTeX)
 
-`paper/main.tex` derlemek için:
+`paper/main.tex` derlemek için (Windows/Unix scriptleri hazır):
 
 ```bash
-pdflatex paper/main.tex
-pdflatex paper/main.tex
+# Windows (PowerShell veya CMD)
+scripts\build-paper.bat
+
+# Linux/macOS
+bash scripts/build-paper.sh
 ```
 
-Türkçe karakterler ve yer imleri için dosyada `babel` Türkçe ana dil ve `hyperref[unicode]` yapılandırması etkindir.
-
+Notlar:
+- pdfLaTeX (LaTeX motoru) kullanılmalıdır; `pdftex`/`tex` (plain) ile derlemeyin.
+- Yardımcı dosyalar `.gitignore` ile hariç tutulur; raporu yerelde derleyin.
 ## Lisans
 
 Bu proje MIT lisansı altındadır. Ayrıntılar için `LICENSE` dosyasına bakınız.
