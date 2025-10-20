@@ -292,7 +292,7 @@ Aşağıdaki tablo, analiz çıktılarından doğrudan üretilen özet değerler
   \centering
   \begin{tabular}{@{}ll@{}}\toprule
   Ölçüt & Değer \\ \midrule
-  \csvreader[head to column names, late after line=\\]{../results/summary_stats.csv}{}{\texttt{\metric} & \num{\value}}
+  % CSV satırları pgfplotstable'a geçirildi; bu satır kaldırıldı.
   \\ \bottomrule
   \end{tabular}
   \caption{Özet istatistikler (CSV’den).}
