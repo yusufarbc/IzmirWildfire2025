@@ -1,4 +1,4 @@
-﻿% !TeX program = pdflatex
+% !TeX program = pdflatex
 \documentclass[11pt,a4paper]{article}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -44,14 +44,14 @@ Bu çalışma, 2025 İzmir orman yangınının etkilerini Sentinel-2 L2A veriler
 \noindent\textbf{Anahtar Kelimeler:} Sentinel-2, NDVI, NBR, dNBR, yanıklık şiddeti, uzaktan algılama, İzmir.
 
 \clearpage
-\\clearpage
-
+\tableofcontents
+\clearpage
 \clearpage
 
 \section{Giriş}
 Yangınların ekosistem, toprak ve yerleşimler üzerindeki etkilerinin nicel ve mekânsal olarak ortaya konması; yangın sonrası rehabilitasyon, yeniden ormanlaştırma ve risk azaltma planlamaları açısından kritik öneme sahiptir. Uzaktan algılama, yüksek zamansal ve mekânsal çözünürlükte tekrarlanan gözlemler üzerinden önce-sonra karşılaştırmalarına imkân tanır. Bu çalışmada Sentinel-2 L2A verileriyle NDVI ve NBR endekslerine dayalı bir yaklaşım sunulmakta; dNDVI ve dNBR ile etki/şiddet haritaları üretilmektedir.
-\\section{Çalışma Alanı, Veri ve Yöntem}
-\\subsection{Çalışma Alanı (AOI)}
+\section{Çalışma Alanı, Veri ve Yöntem}
+\subsection{Çalışma Alanı (AOI)}
 Çalışma alanı İzmir ili sınırları içinde belirlenmiştir. AOI, deponun \texttt{gee/aoi.geojson} dosyasında çokgen (Polygon) olarak tanımlıdır ve analizler bu AOI üzerinde yürütülmüştür.
 \subsection{Veri Kaynakları ve Dönemler}
 \begin{itemize}
@@ -122,6 +122,14 @@ Aşağıdaki tablo, bu çalışmada hesaplanan özet ölçütleri (3 ondalık) g
   \caption{dNBR şiddet sınıflarına göre alanlar.}
   \label{tab:areas}
 \end{table}
+
+\subsection*{Bulgu Özeti}
+\begin{center}
+\fbox{\begin{minipage}{0.95\textwidth}
+AOI genelinde \textit{NDVI (Önce)} = \num{0.451}, \textit{NDVI (Sonra)} = \num{0.431} olup, \(\mathrm{dNDVI} = -\num{0.022}\) olarak hesaplanmıştır. dNBR ortalaması \num{0.003} düzeyindedir. dNBR şiddet sınıflarına göre toplam yanmış alan yaklaşık \num{45448.49}\,ha olup, yüksek/orta–yüksek sınıflar sınırlıdır; etki çoğunlukla düşük şiddet düzeyindedir.
+\end{minipage}}
+\end{center}
+
 
 \subsection{Haritalar}
 \begin{figure}[H]
@@ -195,8 +203,13 @@ Aşağıdaki tablo, bu çalışmada hesaplanan özet ölçütleri (3 ondalık) g
 Uygulanan su/deniz ve kıyı filtreleri yalancı pozitifleri belirgin biçimde azaltmıştır. Bununla birlikte fenoloji farklılıkları ve aydınlatma geometrisi bölgesel önyargılar doğurabilir. 
 
 \section{Sınırlılıklar ve Belirsizlikler}
-Bulut/duman kalıntıları, geometri/atmosfer artık hataları ve sabit eşiklerin genellenebilirliği sonuçları etkileyebilir. Bu belirsizlikler nedeniyle sonuçlar dikkatle ve bağlamı gözeterek yorumlanmalıdır.
-
+\begin{itemize}
+  \item Bulut/duman kalıntıları ve maskeleme artıkları (özellikle ince duman) sınıflandırmayı etkileyebilir.
+  \item Geometri/atmosfer kalıntıları ve aydınlatma değişimleri bölgesel önyargılar doğurabilir.
+  \item Sabit dNBR eşiklerinin genellenebilirliği sınırlıdır; AOI'ye özgü dağılım farklılık gösterebilir.
+  \item Mevsimsellik/fenoloji: dönemler arası bitki koşulluluğu farkları yanlış pozitif/negatiflere yol açabilir.
+  \item Kıyı/karışım pikselleri: su/deniz-kıyı karışımları yalancı yanıklık sinyali üretebilir.
+\end{itemize}
 \section{Sonuç}
 Çalışma, Sentinel-2 tabanlı NDVI/NBR fark analizi ile İzmir AOI'sinde yangın etkisini düşük yanıklık şiddeti ve sınırlı alan kaybı ile tanımlamıştır. Maskeler ve kıyı tamponu kıyı/deniz kaynaklı yalancı değişimleri azaltarak yorum güvenilirliğini artırmıştır. 
 
